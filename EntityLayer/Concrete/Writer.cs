@@ -24,6 +24,13 @@ namespace EntityLayer.Concrete
         
         public string WriterPassword { get; set; }
 
+        public List<Blog> Blogs { get; set; }
+        public int CountryID { get; set; }
+        public Country country { get; set; }
+		public int CityID { get; set; }
+		public City city { get; set; }
+		public int DisctrictID { get; set; }
+		public District districts { get; set; }
 
-    }
+	}
 }

@@ -20,5 +20,8 @@ namespace DataAccessLayer.Concrete
         public DbSet<Comment> comments { get; set; }
         public DbSet<Contact> contacts { get; set; }
         public DbSet<Writer> writers { get; set; }
+        public DbSet<Country> countries { get; set; }
+        public DbSet<City> cities { get; set; }
+        public DbSet<District> districts { get; set; }
     }
 }

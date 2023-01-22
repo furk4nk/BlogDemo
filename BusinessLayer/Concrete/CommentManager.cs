@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,12 @@ namespace BusinessLayer.Concrete
             return _commentDal.GetList();
         }
 
-        public void TInsert(Comment t)
+		public List<Comment> TGetList(Expression<Func<Comment, bool>> filter)
+		{
+			return _commentDal.GetList(filter);
+		}
+
+		public void TInsert(Comment t)
         {
             _commentDal.Insert(t);
         }

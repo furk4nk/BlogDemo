@@ -1,3 +1,8 @@
+using BusinessLayer.Container;
+using BusinessLayer.FluentValidation;
+using EntityLayer.Concrete;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,6 +28,9 @@ namespace BlogDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddFluentValidationAutoValidation();
+			services.ContainerDependendies();
+
             services.AddControllersWithViews();
         }
 
@@ -50,7 +58,7 @@ namespace BlogDemo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Blog}/{action=Index}/{id?}");
             });
         }
     }

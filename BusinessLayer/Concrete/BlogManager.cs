@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +24,12 @@ namespace BusinessLayer.Concrete
             _blogDal.Delete(t);
         }
 
-        public Blog TGetById(int ID)
+		public List<Blog> TGetBlogInListAll()
+		{
+            return _blogDal.GetBlogInListAll();
+		}
+
+		public Blog TGetById(int ID)
         {
             return _blogDal.GetById(ID);
         }
@@ -33,7 +39,17 @@ namespace BusinessLayer.Concrete
             return _blogDal.GetList();
         }
 
-        public void TInsert(Blog t)
+		public List<Blog> TGetList(Expression<Func<Blog, bool>> filter)
+		{
+			return _blogDal.GetList(filter);
+		}
+
+		public List<Blog> TGetWriteLastByBlog(int id)
+		{
+            return _blogDal.GetList(x=>x.WriterID==id);
+		}
+
+		public void TInsert(Blog t)
         {
             _blogDal.Insert(t);
         }

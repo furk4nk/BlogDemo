@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,12 @@ namespace BusinessLayer.Concrete
             return _contactDal.GetList();
         }
 
-        public void TInsert(Contact t)
+		public List<Contact> TGetList(Expression<Func<Contact, bool>> filter)
+		{
+			return _contactDal.GetList(filter);
+		}
+
+		public void TInsert(Contact t)
         {
             _contactDal.Insert(t);
         }
