@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogDemo.Controllers
@@ -11,10 +12,19 @@ namespace BlogDemo.Controllers
 		{
 			_commentService = commentService;
 		}
-
-		public IActionResult Index()
+		[HttpGet]
+		public PartialViewResult AddComment()
 		{
-			return View();
+			return PartialView();
 		}
+		[HttpPost]
+		public PartialViewResult AddComment(Comment comment)
+		{
+			comment.CommentDate=System.DateTime.Now;
+			comment.CommentStatus = true;
+			_commentService.TInsert(comment);
+			return PartialView();
+		}
+
 	}
 }

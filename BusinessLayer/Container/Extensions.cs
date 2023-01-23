@@ -32,6 +32,9 @@ namespace BusinessLayer.Container
 			services.AddScoped<IWriterDal, EfWriterDal>();
 
 			services.AddScoped<IValidator<Writer>, WriterValitator>();
+
+			services.AddScoped<INewsLetterService, NewsLetterManager>();
+			services.AddScoped<INewsLetterDal, EfNewsLetterDal>();
 		}
 	}
 }

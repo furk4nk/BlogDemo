@@ -24,5 +24,6 @@ namespace EntityLayer.Concrete
         public bool CommentStatus { get; set; }
         public int BlogID { get; set; }
         public Blog blog { get; set; }
+        public string Email { get; set; }
     }
 }
