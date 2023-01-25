@@ -18,8 +18,7 @@ namespace BusinessLayer.Concrete
         {
             _blogDal = blogDal;
         }
-
-        public void TDelete(Blog t)
+		public void TDelete(Blog t)
         {
             _blogDal.Delete(t);
         }
@@ -58,5 +57,10 @@ namespace BusinessLayer.Concrete
         {
             _blogDal.Update(t);
         }
-    }
+
+		public List<Blog> TGetLastBlogs(int count)
+		{
+            return _blogDal.GetLastBlogs(count);
+		}
+	}
 }

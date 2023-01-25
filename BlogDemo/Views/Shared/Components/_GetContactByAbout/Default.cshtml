@@ -1,0 +1,55 @@
+﻿@using EntityLayer.Concrete
+@model List<About>
+@foreach (var item in Model)
+{
+	<div class="contact-map inner-sec">
+
+		<iframe src="@item.AboutMapLocation"
+			class="map" style="border:0" allowfullscreen=""></iframe>
+	</div>
+	<div class="ad-inf-sec bg-light">
+		<div class="container">
+			<div class="address row">
+
+				<div class="col-lg-4 address-grid">
+					<div class="row address-info">
+						<div class="col-md-4 address-left text-center">
+							<i class="far fa-map"></i>
+						</div>
+						<div class="col-md-8 address-right text-left">
+							<h6>Adres</h6>
+							<p>
+								@item.AboutDetailShort
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 address-grid">
+					<div class="row address-info">
+						<div class="col-md-4 address-left text-center">
+							<i class="far fa-envelope"></i>
+						</div>
+						<div class="col-md-8 address-right text-left">
+							<h6>Email</h6>
+							<p>
+								Email :
+								<a href="mailto:#"> @item.AboutEmailAddress</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 address-grid">
+					<div class="row address-info">
+						<div class="col-md-4 address-left text-center">
+							<i class="fas fa-mobile-alt"></i>
+						</div>
+						<div class="col-md-8 address-right text-left">
+							<h6>Telefon</h6>
+							<p>@item.AboutPhoneNumber</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

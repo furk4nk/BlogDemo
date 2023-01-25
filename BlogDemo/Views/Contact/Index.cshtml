@@ -1,0 +1,60 @@
+﻿@model EntityLayer.Concrete.Contact
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<!--
+	Author: W3layouts
+	Author URL: http://w3layouts.com
+	License: Creative Commons Attribution 3.0 Unported
+	License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+
+<link href="~/web/css/contact.css" rel='stylesheet' type='text/css' />
+
+
+<section class="main-content-w3layouts-agileits">
+
+	<h3 class="tittle">Contact Us</h3>
+	<p class="sub text-center">We love to discuss your idea</p>
+	
+	@await Component.InvokeAsync("_GetContactByAbout")
+
+	<div class="container">
+		<div class="contact_grid_right">
+			<form method="post" asp-action="Index" asp-controller="Contact">
+				<div class="row contact_left_grid">
+					<div class="col-md-6 con-left">
+						<div class="form-group">
+							<label for="validationCustom01 my-2">İsim</label><br/>
+							<span class="text-danger" asp-validation-for="ContactUserName"></span>
+							<input class="form-control" type="text" placeholder="" asp-for="ContactUserName">
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlInput1">Email</label><br />
+							<span class="text-danger" asp-validation-for="ContactMail"></span>
+							<input class="form-control" type="text" placeholder="" asp-for="ContactMail">
+						</div>
+						<div class="form-group">
+							<label for="validationCustom03 my-2">Konu</label><br />
+							<span class="text-danger" asp-validation-for="ContactSubject"></span>
+							<input class="form-control" type="text" placeholder="" asp-for="ContactSubject">
+						</div>
+					</div>
+					<div class="col-md-6 con-right">
+						<div class="form-group">
+							<label for="textarea">Mesajınız</label><br />
+							<span class="text-danger" asp-validation-for="ContactMessage"></span>
+							<textarea id="textarea" placeholder="" asp-for="ContactMessage"></textarea>
+						</div>
+						<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+						<input class="form-control" type="submit" value="Gönder">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+

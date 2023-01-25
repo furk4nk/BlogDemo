@@ -14,11 +14,12 @@ namespace EntityLayer.Concrete
 
         public string AboutDetails1 { get; set; }
 
-        public string AboutDetails2 { get; set; }
+        public string AboutDetailShort { get; set; }
 
-        public string AboutImage1 { get; set; }
+        public string AboutEmailAddress { get; set; }
 
-        public string AboutImage2 { get; set; }
+        public string AboutPhoneNumber { get; set; }
+        public string AboutImage { get; set; }
 
         public string AboutMapLocation { get; set; }
 

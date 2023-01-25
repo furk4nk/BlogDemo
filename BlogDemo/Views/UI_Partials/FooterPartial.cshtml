@@ -3,83 +3,17 @@
 <footer>
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-4 footer-grid-agileits-w3ls text-left">
-				<h3>Hakkımızda</h3>
-				<p>Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. lacinia eget consectetur sed, convallis at tellus..</p>
-				<div class="read">
-					<a href="single.html" class="btn btn-primary read-m">Devamını Oku</a>
-				</div>
-			</div>
-			<div class="col-lg-4 footer-grid-agileits-w3ls text-left">
+			@await Component.InvokeAsync("_FooterAboutPartial")
+			
+			@await Component.InvokeAsync("_FooterPostPartial")
 
-				<div class="tech-btm">
-					<h3>Son Paylaşılanlar</h3>
-					<div class="blog-grids row mb-3">
-						<div class="col-md-5 blog-grid-left">
-							<a href="single.html">
-								<img src="~/web/images/4.jpg" class="card-img-top img-fluid" alt="">
-							</a>
-						</div>
-						<div class="col-md-7 blog-grid-right">
-
-							<h5>
-								<a href="#">Pellentesque dui, non felis. Maecenas male non felis </a>
-							</h5>
-							<div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 20 Jan, 2018
-								</span>
-							</div>
-						</div>
-
-					</div>
-					<div class="blog-grids row mb-3">
-						<div class="col-md-5 blog-grid-left">
-							<a href="#">
-								<img src="~/web/images/5.jpg" class="card-img-top img-fluid" alt="">
-							</a>
-						</div>
-						<div class="col-md-7 blog-grid-right">
-
-							<h5>
-								<a href="single.html">Pellentesque dui, non felis. Maecenas male non felis </a>
-							</h5>
-							<div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 20 Jan, 2018
-								</span>
-							</div>
-						</div>
-
-					</div>
-					<div class="blog-grids row mb-3">
-						<div class="col-md-5 blog-grid-left">
-							<a href="#">
-								<img src="~/web/images/6.jpg" class="card-img-top img-fluid" alt="">
-							</a>
-						</div>
-						<div class="col-md-7 blog-grid-right">
-
-							<h5>
-								<a href="single.html">Pellentesque dui, non felis. Maecenas male non felis </a>
-							</h5>
-							<div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 20 Jan, 2018
-								</span>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
 			<!-- subscribe -->
 			<div class="col-lg-4 subscribe-main footer-grid-agileits-w3ls text-left">
 				<h2>Abone Olun</h2>
 				<div class="subscribe-main text-left">
-					<div class="subscribe-form">						
-							<input class="form-control" type="email" placeholder="Mail Adresiniz..." required="" id="Emaill">
-							<button type="submit" class="btn btn-primary submit" id="btn2">Abone Ol</button>
+					<div class="subscribe-form">
+						<input class="form-control" type="email" placeholder="Mail Adresiniz..." required="" id="Emaill">
+						<button type="submit" class="btn btn-primary submit" id="btn2">Abone Ol</button>
 						<div class="clearfix"> </div>
 					</div>
 					<p>Gizliliğe Saygı duyuyoruz!</p>
@@ -134,14 +68,14 @@
 
 	</div>
 </footer>
-<script>
+<script type="text/javascript">
 	$(document).ready(function () {
 		$("#btn2").click(function () {
 			var mail = document.getElementById("Emaill");
 			var newsLetter = {
 				MailID: 0,
-				Mail:mail.value,
-				MailStatus:true
+				Mail: mail.value,
+				MailStatus: true
 			};
 			$.ajax({
 				url: "@Url.Action("SubscribeMail", "NewsLetter")",
@@ -149,8 +83,12 @@
 				data: newsLetter,
 				datatype: "json",
 				success: function (data) {
-					swal("kayıt Başarılı","Abone Olundu","success");
-					mail.value="";
+					swal("kayıt Başarılı", "Abone Olundu", "success");
+					mail.value = "";
+				},
+				error: function () {
+					swal("kayıt başarısız", "Abone olunmadı", "error");
+					mail.value = "";
 				}
 			});
 		});

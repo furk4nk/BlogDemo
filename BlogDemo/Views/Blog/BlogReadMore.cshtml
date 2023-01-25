@@ -72,14 +72,12 @@
 				<!--right-->
 				<aside class="col-lg-4 agileits-w3ls-right-blog-con text-right">
 					<div class="right-blog-info text-left">
-						<div class="tech-btm">
-							<img src="~/web/images/banner1.jpg" class="img-fluid" alt="">
-						</div>
-						
+
+
 						@await Html.PartialAsync("~/Views/NewsLetter/SubscribeMail.cshtml")
 
 						@await Component.InvokeAsync("_CategoryListByBlogPartial")
-						
+
 						@await Component.InvokeAsync("_WriterLastBlogs")
 
 						<div class="single-gd my-5 tech-btm">
@@ -105,23 +103,7 @@
 									 aria-valuemax="100"></div>
 							</div>
 						</div>
-						<div class="single-gd tech-btm">
-							<h4>Recent Post</h4>
-							<div class="blog-grids">
-								<div class="blog-grid-left">
-									<a href="single.html">
-										<img src="~/web/images/b1.jpg" class="img-fluid" alt="">
-									</a>
-								</div>
-								<div class="blog-grid-right">
-
-									<h5>
-										<a href="single.html">Pellentesque dui, non felis. Maecenas male</a>
-									</h5>
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-						</div>
+						@await Component.InvokeAsync("_LastRecentBlog",new { count = 1 })
 					</div>
 
 				</aside>

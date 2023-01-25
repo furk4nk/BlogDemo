@@ -19,7 +19,13 @@ namespace DataAccessLayer.EntityFramework
 			{
 				return c.blogs.Include(x => x.category).ToList();
 			}
-
+		}
+		public List<Blog> GetLastBlogs(int count=1)
+		{
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().OrderByDescending(x => x.BlogCreateDate).Take(count).ToList();
+			}
 		}
 	}
 }

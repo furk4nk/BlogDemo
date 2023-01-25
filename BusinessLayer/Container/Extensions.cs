@@ -35,6 +35,14 @@ namespace BusinessLayer.Container
 
 			services.AddScoped<INewsLetterService, NewsLetterManager>();
 			services.AddScoped<INewsLetterDal, EfNewsLetterDal>();
+
+			services.AddScoped<IAboutService,AboutManager>();
+			services.AddScoped<IAboutDal,EfAboutDal>();
+
+			services.AddScoped<IContactService, ContactManager>();
+			services.AddScoped<IContactDal, EfContactDal>();
+
+			
 		}
 	}
 }

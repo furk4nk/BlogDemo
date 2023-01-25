@@ -11,5 +11,6 @@ namespace BusinessLayer.Abstract
     {
         List<Blog> TGetBlogInListAll();
         List<Blog> TGetWriteLastByBlog(int id);
+        List<Blog> TGetLastBlogs(int count);
     }
 }
