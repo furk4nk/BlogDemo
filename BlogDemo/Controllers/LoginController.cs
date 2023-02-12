@@ -46,11 +46,11 @@ namespace BlogDemo.Controllers
 					var result = BCrypt.Net.BCrypt.Verify(model.Password, uservalues[0].WriterPassword);
 					if (result == true)
 					{
-						var claims = new List<Claim>
+						List<Claim> claims = new List<Claim>
 						{
 							new Claim(ClaimTypes.Name,model.Email)
 						};
-						var userIdentity=new ClaimsIdentity(claims,"a ");
+						ClaimsIdentity userIdentity=new ClaimsIdentity(claims,"a ");
 						ClaimsPrincipal principal= new ClaimsPrincipal(userIdentity);
 						await HttpContext.SignInAsync(principal);
 						return RedirectToAction("BlogListByWriter", "Blog",3 );		 // parametre gönderemedik goto
