@@ -9,8 +9,16 @@ namespace BusinessLayer.Abstract
 {
     public interface IBlogService : IGenericService<Blog>
     {
+        //Summary:Catefory İnclude
+        //
+        //
+        //Return : List Blog Listesi İnclude Kategoriler
         List<Blog> TGetBlogInListAll();
-        List<Blog> TGetWriteLastByBlog(int id);
+
+        //Summary: Yazara Göre Blog Listesi
+        List<Blog> TGetBlogListByWriter(int id);
+
+        // Return: Yazarın son blogları
         List<Blog> TGetLastBlogs(int count);
     }
 }

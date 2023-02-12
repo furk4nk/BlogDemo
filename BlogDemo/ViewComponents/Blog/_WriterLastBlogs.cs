@@ -12,9 +12,10 @@ namespace BlogDemo.ViewComponents.Blog
 			_blogService = blogService;
 		}
 
-		public IViewComponentResult Invoke()
+		public IViewComponentResult Invoke(int id)
 		{
-			var values = _blogService.TGetWriteLastByBlog(1);
+			
+			var values = _blogService.TGetBlogListByWriter(id);
 			return View(values);
 		}
 	}

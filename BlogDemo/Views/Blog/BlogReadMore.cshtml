@@ -78,7 +78,7 @@
 
 						@await Component.InvokeAsync("_CategoryListByBlogPartial")
 
-						@await Component.InvokeAsync("_WriterLastBlogs")
+						@await Component.InvokeAsync("_WriterLastBlogs",new{id=ViewBag.id})
 
 						<div class="single-gd my-5 tech-btm">
 							<h4>Our Progress</h4>
