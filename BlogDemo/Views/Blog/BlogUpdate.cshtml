@@ -1,0 +1,53 @@
+﻿@model EntityLayer.Concrete.Blog
+@{
+    ViewData["Title"] = "BlogUpdate";
+    Layout = "~/Views/Shared/_WriterLayout.cshtml";
+}
+
+<h1>Blog Güncelleme Sayfası</h1>
+<form method="post" asp-action="BlogInsert" asp-controller="Blog" id="form1">
+
+	<div class="form-group">
+		<label class="col-form-label">Blog Başlığı</label>
+		<input type="text" placeholder="Blog Başlığı(Zorunlu)..." asp-for="BlogTitle" class="form-control" />
+		<span class="text-danger" asp-validation-for="BlogTitle"></span>
+	</div>
+	<div class="form-group">
+		<label class="col-form-label">Blog Görseli</label>
+		<input type="text" placeholder="Blog Görseli(Opsiyonel)..." asp-for="BlogImage" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label class="col-form-label">Blog Küçük Görsel</label>
+		<input type="text" placeholder="Blog Küçük Görsel(Opsiyonel)..." asp-for="BlogThumbNailImage" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label class="col-form-label">Blog Durumu</label>	
+		<input type="text" placeholder="Blog Küçük Görsel(Opsiyonel)..." asp-for="BlogStatus" class="form-control" id="BlogDurum" />
+	</div>
+	<div class="form-group">
+		<label class="col-form-label">Blog Kategorisini Seçiniz</label>
+		@Html.DropDownListFor(x=>x.CategoryID,(List<SelectListItem>)ViewBag.value,new {@class="form-control"})
+		<span class="text-danger" asp-validation-for="CategoryID"></span>
+	</div>
+	<div class="form-group">
+		<label class="col-form-label">Blog İçeriği</label>
+		<textarea class="form-control" rows="10" cols="3" placeholder="içerik(zorunlu)" asp-for="BlogContext"></textarea>
+		<span class="text-danger" asp-validation-for="BlogContext"></span>
+	</div>
+	<button class="btn btn-outline-primary">Kaydet ve Güncelle</button>
+	<a href="/Blog/BlogListByWriter" class="btn btn-outline-cancel">Vazgeç</a>
+</form>
+<script>
+	$(document).ready(){
+
+		var a = document.getElementById("BlogDurum");
+		if(a.textContent=="True"){
+			a.textContent="Aktif";
+		}
+		else{
+			a.textContent="Pasif";
+		}
+		a.ariaReadOnly=true;
+	};
+</script>
+@*güncelleme yapmıyor yeni ekliyor isim değiştrimiyor yani script çalışmıyor*@

@@ -48,17 +48,22 @@ namespace BlogDemo.Controllers
 					{
 						List<Claim> claims = new List<Claim>
 						{
-							new Claim(ClaimTypes.Name,model.Email)
+							new Claim(ClaimTypes.Name,model.Email),
 						};
 						ClaimsIdentity userIdentity=new ClaimsIdentity(claims,"a ");
 						ClaimsPrincipal principal= new ClaimsPrincipal(userIdentity);
 						await HttpContext.SignInAsync(principal);
-						return RedirectToAction("BlogListByWriter", "Blog",3 );		 // parametre gönderemedik goto
+						return RedirectToAction("BlogListByWriter", "Blog");		 // parametre gönderemedik goto
 					}
 				}
 				ModelState.AddModelError("", "Email veya şifre hatalı");
 			}
 			return View();
+		}
+		public async Task<IActionResult> LogOut()
+		{
+			await HttpContext.SignOutAsync();
+			return RedirectToAction("Index", "Login");
 		}
 	}
 }
