@@ -3,7 +3,7 @@
     ViewData["Title"] = "BlogUpdate";
     Layout = "~/Views/Shared/_WriterLayout.cshtml";
 }
-
+<script src="~/web/js/jquery-2.2.3.min.js"></script>
 <h1>Blog Güncelleme Sayfası</h1>
 <form method="post" asp-action="BlogInsert" asp-controller="Blog" id="form1">
 
@@ -38,16 +38,16 @@
 	<a href="/Blog/BlogListByWriter" class="btn btn-outline-cancel">Vazgeç</a>
 </form>
 <script>
-	$(document).ready(){
-
+	$(document).ready(function(){
 		var a = document.getElementById("BlogDurum");
-		if(a.textContent=="True"){
-			a.textContent="Aktif";
+		console.log(a);
+		if (a.value == "Aktif") {
+			a.value = "Aktif";
 		}
-		else{
-			a.textContent="Pasif";
+		else {
+			a.value = "Pasif";
 		}
-		a.ariaReadOnly=true;
-	};
+		a.ariaReadOnly = true;
+	});
 </script>
 @*güncelleme yapmıyor yeni ekliyor isim değiştrimiyor yani script çalışmıyor*@

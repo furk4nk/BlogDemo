@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
@@ -87,7 +88,8 @@ namespace BlogDemo.Controllers
 		}
 		[HttpGet]
 		public IActionResult BlogUpdate(int id)
-		{
+		{	
+
 			var values=_blogService.TGetById(id);
 			var CategoryValues = CategoryList();
 			ViewBag.value = CategoryValues;
@@ -112,6 +114,7 @@ namespace BlogDemo.Controllers
 			var values = CategoryList();	
 			ViewBag.value = values;
 			return View(blog);
+
 		}
 		private List<SelectListItem> CategoryList()
 		{
