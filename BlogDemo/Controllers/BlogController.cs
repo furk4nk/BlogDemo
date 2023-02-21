@@ -2,6 +2,7 @@
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
 {
+	[Authorize]
 	public class BlogController : Controller
 	{
 		private readonly IBlogService _blogService;
@@ -25,7 +27,7 @@ namespace BlogDemo.Controllers
 			_writerService = writerService;
 			_categoryService = categoryService;
 		}
-
+		[AllowAnonymous]
 		//Blogların Ana Sayfada Listelenmesi
 		public IActionResult Index()
 		{
@@ -33,6 +35,7 @@ namespace BlogDemo.Controllers
 			return View(values);
 		}
 
+		[AllowAnonymous]
 		//Blog Detaylarının Listelenmesi
 		public IActionResult BlogReadMore(int id)
 		{
@@ -40,7 +43,7 @@ namespace BlogDemo.Controllers
 			ViewBag.id = id;
 			return View(values);
 		}
-
+		[AllowAnonymous]
 		//Yazarın Bloglarının listelenmesi
 		public IActionResult BlogListByWriter()
 		{
@@ -48,7 +51,6 @@ namespace BlogDemo.Controllers
 			var values = _blogService.TGetBlogListByWriter(VerifiedAuthor.WriterID);
 			return View(values);
 		}
-
 		[HttpGet]
 		public IActionResult BlogInsert()
 		{
@@ -65,6 +67,7 @@ namespace BlogDemo.Controllers
 			{
 				var writer=_writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
 				blog.WriterID = writer.WriterID;
+				blog.BlogCreateDate=System.DateTime.Now;
 				_blogService.TInsert(blog);
 				return RedirectToAction("BlogListByWriter", "Blog");
 			}
@@ -79,12 +82,11 @@ namespace BlogDemo.Controllers
 			ViewBag.value = values;
 			return View(blog);		
 		}
-
 		public IActionResult BlogDelete(int id)
 		{
 			Blog temp = _blogService.TGetList(x => x.BlogID == id).FirstOrDefault();
 			_blogService.TDelete(temp);
-			return RedirectToAction("BlogListByWrite","Login");
+			return RedirectToAction("BlogListByWriter","Blog");
 		}
 		[HttpGet]
 		public IActionResult BlogUpdate(int id)
@@ -102,7 +104,8 @@ namespace BlogDemo.Controllers
 			ValidationResult result = validations.Validate(blog);
 			if (result.IsValid)
 			{
-				return RedirectToAction("BlogListByWriter","Login");
+				_blogService.TUpdate(blog);
+				return RedirectToAction("BlogListByWriter","Blog");
 			}
 			else
 			{

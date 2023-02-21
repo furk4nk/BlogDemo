@@ -9,3 +9,43 @@
 
 <script src="~/writer/assets/js/dashboard.js"></script>
 <script src="~/writer/assets/js/todolist.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/web/js/jquery-2.2.3.min.js"></script>
+
+<script type="text/javascript">
+	// sweetalert delete
+	$('.btnsil').on('click', function (e) {
+		e.preventDefault();
+		var url = $(this).attr('href');
+		Swal.fire({
+			title: 'Silmek İstediğinizden Emin Misiniz?',
+			text: "Bu işlem geri alınamaz!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Evet,Sil!',
+			cancelButtonText: 'Vazgeç'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					url: url,
+					type: 'POST',
+					success: function (result) {
+						if (result) {
+							console.log(result);
+							Swal.fire(
+								'Silindi!',
+								'Başarılı!.',
+								'success'
+							).then(() => {
+								location.reload();
+							});
+						}
+					}
+				});
+			}
+		});
+	});
+</script>

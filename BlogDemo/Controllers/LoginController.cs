@@ -30,7 +30,7 @@ namespace BlogDemo.Controllers
 		{
 			if (User.Identity.IsAuthenticated)
 			{
-				// return RedirectToAction("/Writer/Dashboard/"); eğer kullanıcı sisteme authenticate olduysa dashboarda yönelndirilsin ...
+				return RedirectToAction("Index", "Dashboard");
 			}
 			return View();
 		}
@@ -53,7 +53,7 @@ namespace BlogDemo.Controllers
 						ClaimsIdentity userIdentity=new ClaimsIdentity(claims,"a ");
 						ClaimsPrincipal principal= new ClaimsPrincipal(userIdentity);
 						await HttpContext.SignInAsync(principal);
-						return RedirectToAction("BlogListByWriter", "Blog");		 // parametre gönderemedik goto
+						return RedirectToAction("Index", "Dashboard");		 // parametre gönderemedik goto
 					}
 				}
 				ModelState.AddModelError("", "Email veya şifre hatalı");

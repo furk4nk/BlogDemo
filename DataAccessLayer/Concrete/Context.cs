@@ -12,7 +12,7 @@ namespace DataAccessLayer.Concrete
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=F-51543\\SQLEXPRESS;database=DbBlog;Integrated Security=True;");
+            optionsBuilder.UseSqlServer("server=FN-515AN_FURKAN;database=DbBlog;Integrated Security=True;");
         }
         public DbSet<About> abouts { get; set; }
         public DbSet<Blog> blogs { get; set; }
@@ -24,5 +24,6 @@ namespace DataAccessLayer.Concrete
         public DbSet<City> cities { get; set; }
         public DbSet<District> districts { get; set; }
         public DbSet<NewsLetter> newsLetters { get; set; }
+        public DbSet<BlogRayting> blogRaytings { get; set; }
     }
 }

@@ -12,9 +12,16 @@ namespace DataAccessLayer.EntityFramework
 {
 	public class EfWriterDal : GenericRepository<Writer>, IWriterDal
 	{
-		public void Insert(Writer writer, string password)
+		/// <summary>
+		/// HASH algoritması ile şifreyi Hash ile gönderen metot
+		/// </summary>
+		/// <param name="writer">kullanıcı bilgileri</param>
+		/// eklenecek kullanıcının verileri
+		/// <param name="passord">kullanıcının hash ile gitmesi gereken verisi</param>
+		/// eklenecek kullanıcının şifrelenmesi gereken kullanıcı şifresi
+		public void Insert(Writer writer , string passord)
 		{
-			writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(password);
+			writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(passord);
 			using (Context c = new Context())
 			{
 				c.Add(writer);

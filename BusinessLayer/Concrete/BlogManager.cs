@@ -14,6 +14,8 @@ namespace BusinessLayer.Concrete
     {
         private readonly IBlogDal _blogDal;
 
+        public int? TBlogCount => _blogDal.BlogCount;
+
         public BlogManager(IBlogDal blogDal)
         {
             _blogDal = blogDal;
@@ -62,5 +64,20 @@ namespace BusinessLayer.Concrete
 		{
             return _blogDal.GetLastBlogs(count);
 		}
-	}
+
+        public List<Blog> TGetLastBlogsWithCategoryAndWriter(int count)
+        {
+            return _blogDal.GetLastBlogsWithCategoryAndWriter(count);
+        }
+
+        public int TWriterBlogCount(int id)
+        {
+            return _blogDal.WriterBlogCount(id);
+        }
+
+        public List<Blog> TGetRecentBlogListByWriter(int id, int count)
+        {
+            return _blogDal.GetRecentBlogListByWriter(id, count);
+        }
+    }
 }

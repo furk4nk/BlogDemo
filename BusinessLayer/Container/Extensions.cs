@@ -40,9 +40,7 @@ namespace BusinessLayer.Container
 			services.AddScoped<IAboutDal,EfAboutDal>();
 
 			services.AddScoped<IContactService, ContactManager>();
-			services.AddScoped<IContactDal, EfContactDal>();
-
-			
+			services.AddScoped<IContactDal, EfContactDal>();		
 		}
 	}
 }

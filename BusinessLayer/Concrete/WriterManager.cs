@@ -46,7 +46,7 @@ namespace BusinessLayer.Concrete
 
 		public void TInsert(Writer t, string password)
 		{
-			_writerDal.Insert(t, password);
+			_writerDal.Insert(t,password);
 		}
 
 		public void TUpdate(Writer t)

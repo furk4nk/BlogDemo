@@ -9,16 +9,51 @@ namespace BusinessLayer.Abstract
 {
     public interface IBlogService : IGenericService<Blog>
     {
-        //Summary:Catefory İnclude
-        //
-        //
-        //Return : List Blog Listesi İnclude Kategoriler
+        /// <summary>
+        /// blogları Include eder
+        /// </summary>
+        /// <returns> blog listesi</returns>
         List<Blog> TGetBlogInListAll();
 
-        //Summary: Yazara Göre Blog Listesi
+        /// <summary>
+        /// yazarın Tüm Bloglarını listeler
+        /// </summary>
+        /// <param name="id"> yazar ID</param>
+        /// <returns>Blog Listesi</returns>
         List<Blog> TGetBlogListByWriter(int id);
 
-        // Return: Yazarın son blogları
+        /// <summary>
+        /// Tüm Bloglar arasında Tarih sıralaması yaparak en son paylaşılan Blogları Parametreye Göre çağırır
+        /// </summary>
+        /// <param name="count">Kaç Blog Listelenecek</param>
+        /// <returns>Blog Listesi</returns>
         List<Blog> TGetLastBlogs(int count);
+
+        /// <summary>
+        /// parametreye göre son blogları listelemek için kullanılır
+        /// </summary>
+        /// <param name="count">sondan kaç tane bloğun listelenmek istediğini ister</param>
+        /// <returns>parametreye göre blog listesi döndürür</returns>
+        List<Blog> TGetLastBlogsWithCategoryAndWriter(int count);
+
+        /// <summary>
+        /// Toplam Blog Sayısını Tutar
+        /// </summary>
+        int? TBlogCount { get; }
+
+        /// <summary>
+        /// Yazarın blog sayısını Döndürür
+        /// </summary>
+        /// <param name="id">Yazar ID</param>
+        /// <returns>int Blog Sayısı</returns>
+        int TWriterBlogCount(int id);
+
+        /// <summary>
+        /// Yazarın parametreye Göre En son Paylaştığı Bloglar
+        /// </summary>
+        /// <param name="id">Yazar ID</param>
+        /// <param name="count">Blog Sayısı (Sondan kaç blog)</param>
+        /// <returns>Blog Listesi</returns>
+        List<Blog> TGetRecentBlogListByWriter(int id,int count);
     }
 }

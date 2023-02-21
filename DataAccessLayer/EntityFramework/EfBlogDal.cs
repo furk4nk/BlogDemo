@@ -13,7 +13,10 @@ namespace DataAccessLayer.EntityFramework
 {
 	public class EfBlogDal : GenericRepository<Blog>, IBlogDal
 	{
-		public List<Blog> GetBlogInListAll()
+		Context c = new Context();
+        public int? BlogCount => c.Set<Blog>().Count();
+
+        public List<Blog> GetBlogInListAll()
 		{
 			using (Context c = new Context())
 			{
@@ -27,5 +30,33 @@ namespace DataAccessLayer.EntityFramework
 				return c.Set<Blog>().OrderByDescending(x => x.BlogCreateDate).Take(count).ToList();
 			}
 		}
-	}
+
+        public List<Blog> GetLastBlogsWithCategoryAndWriter(int count)
+        {
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().OrderByDescending(x => x.BlogCreateDate)
+					.Take(count)
+					.Include(x => x.category)
+					.Include(x => x.writer).ToList();
+			}
+        }
+
+        public int WriterBlogCount(int id)
+        {
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().Where(x => x.WriterID == id).Count();
+			}
+        }
+		public List<Blog> GetRecentBlogListByWriter(int id,int count)
+		{
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().Where(x => x.WriterID==id)
+					.OrderByDescending(x => x.BlogCreateDate)
+					.Take(count).ToList();
+			}	
+		}
+    }
 }

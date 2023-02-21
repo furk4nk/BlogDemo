@@ -5,8 +5,10 @@
 }
 <script src="~/web/js/jquery-2.2.3.min.js"></script>
 <h1>Blog Güncelleme Sayfası</h1>
-<form method="post" asp-action="BlogInsert" asp-controller="Blog" id="form1">
-
+<form method="post" asp-action="BlogUpdate" asp-controller="Blog">
+	@Html.HiddenFor(x=>x.BlogID)
+	@Html.HiddenFor(x=>x.BlogCreateDate)
+	@Html.HiddenFor(x=>x.WriterID)
 	<div class="form-group">
 		<label class="col-form-label">Blog Başlığı</label>
 		<input type="text" placeholder="Blog Başlığı(Zorunlu)..." asp-for="BlogTitle" class="form-control" />

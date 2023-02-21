@@ -2,10 +2,12 @@
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogDemo.Controllers
 {
+	[AllowAnonymous]
 	public class ContactController : Controller
 	{
 		private readonly IContactService _contactService;

@@ -1,0 +1,66 @@
+﻿@model BlogDemo.Models.WriterViewModel
+@{
+    ViewData["Title"] = "WriterInsert";
+    Layout = "~/Views/Shared/_WriterLayout.cshtml";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Yazar Kayıt Sayfası</h4> </br>
+            <form class="forms-sample" method="post" asp-action="WriterInsert" asp-controller="Writer" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="exampleInputName1">Ad &amp; Soyad</label>
+                    <span class="text-danger" asp-validation-for="WriterName"></span>
+                    <input type="text" class="form-control" name="WriterName" asp-for="WriterName">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail3">Mail Adresi</label>
+                    <span class="text-danger" asp-validation-for="WriterMail"></span>
+                    <input type="email" class="form-control" name="WriterMail" asp-for="WriterMail">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword4">Şifreniz</label>
+                    <span class="text-danger" asp-validation-for="WriterPassword"></span>
+                    <input type="password" class="form-control" id="passwordIn1" placeholder="Şifreniz" name="WriterPassword">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" onclick="togglePass('1')"> Şifreyi Göster
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword4">Şifre Tekrar</label>
+                    <span class="text-danger" asp-validation-for="WriterConfirmPassword"></span>
+                    <input type="password" class="form-control" id="passwordIn2" placeholder="Şifre Tekrar" name="WriterConfirmPassword">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" onclick="togglePass('2')"> Şifreyi Göster
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Resim yükle</label><br />
+                    <input type="file" name="WriterImage" class="file-upload-browse form-control" accept="images/*" data-buttonText="Resim Seç" asp-for="WriterImage"/>
+                </div>
+                <div class="form-group">
+                    <label for="exampleTextarea1">Yazar Hakkında</label>
+                    <span class="text-danger" asp-validation-for="WriterAbout"></span>
+                    <textarea class="form-control" name="WriterAbout" rows="4" cols="10" asp-for="WriterAbout"></textarea>
+                </div>
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <button type="submit" class="btn btn-gradient-primary mr-2">Ekle</button>
+                <a href="/Blog/BlogListByWriter" class="btn btn-light">Vazgeç</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePass(a){
+        let element = document.getElementById('passwordIn'+a);
+        element.type = element.type=='password' ? 'text' : 'password';
+    }
+</script>
+
+
