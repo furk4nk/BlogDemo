@@ -25,5 +25,7 @@ namespace DataAccessLayer.Concrete
         public DbSet<District> districts { get; set; }
         public DbSet<NewsLetter> newsLetters { get; set; }
         public DbSet<BlogRayting> blogRaytings { get; set; }
-    }
+        public DbSet<Notification> notifications { get; set; }
+        public DbSet<Message> messages { get; set; }
+    }   
 }

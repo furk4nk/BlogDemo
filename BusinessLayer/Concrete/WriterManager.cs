@@ -19,7 +19,12 @@ namespace BusinessLayer.Concrete
 			_writerDal = writerDal;
 		}
 
-		public void TDelete(Writer t)
+        public bool IsWriterControl(string mail)
+        {
+           return _writerDal.IsWriterControl(mail);
+        }
+
+        public void TDelete(Writer t)
 		{
 			_writerDal.Delete(t);
 		}

@@ -22,6 +22,7 @@ namespace BlogDemo.Controllers
 		{
 			var author= _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
 			ViewBag.author = author;
+			ViewBag.WriterMail=author.WriterMail;
 			ViewBag.blogcount = _blogService.TBlogCount;
 			ViewBag.writerblogcount=_blogService.TWriterBlogCount(author.WriterID);
 			ViewBag.categorycount = _categoryService.TGetList().Count();

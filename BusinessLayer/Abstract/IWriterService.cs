@@ -11,5 +11,6 @@ namespace BusinessLayer.Abstract
     public interface IWriterService : IGenericService<Writer>
     {
         void TInsert(Writer writer, string password);
+        bool IsWriterControl(string mail);
     }
 }

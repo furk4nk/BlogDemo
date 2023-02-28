@@ -15,131 +15,133 @@ using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
 {
-	[Authorize]
-	public class BlogController : Controller
-	{
-		private readonly IBlogService _blogService;
-		private readonly IWriterService _writerService;
-		private readonly ICategoryService _categoryService;
-		public BlogController(IBlogService blogService, IWriterService writerService, ICategoryService categoryService)
-		{
-			_blogService = blogService;
-			_writerService = writerService;
-			_categoryService = categoryService;
-		}
-		[AllowAnonymous]
-		//Blogların Ana Sayfada Listelenmesi
-		public IActionResult Index()
-		{
-			List<Blog> values = _blogService.TGetBlogInListAll();
-			return View(values);
-		}
+    [Authorize]
+    public class BlogController : Controller
+    {
+        private readonly IBlogService _blogService;
+        private readonly IWriterService _writerService;
+        private readonly ICategoryService _categoryService;
+        public BlogController(IBlogService blogService, IWriterService writerService, ICategoryService categoryService)
+        {
+            _blogService = blogService;
+            _writerService = writerService;
+            _categoryService = categoryService;
+        }
+        [AllowAnonymous]
+        //Blogların Ana Sayfada Listelenmesi
+        public IActionResult Index()
+        {
+            List<Blog> values = _blogService.TGetBlogInListAll();
+            return View(values);
+        }
 
-		[AllowAnonymous]
-		//Blog Detaylarının Listelenmesi
-		public IActionResult BlogReadMore(int id)
-		{
-			var values = _blogService.TGetList(x => x.BlogID == id);
-			ViewBag.id = id;
-			return View(values);
-		}
-		[AllowAnonymous]
-		//Yazarın Bloglarının listelenmesi
-		public IActionResult BlogListByWriter()
-		{
-			var VerifiedAuthor = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
-			var values = _blogService.TGetBlogListByWriter(VerifiedAuthor.WriterID);
-			return View(values);
-		}
-		[HttpGet]
-		public IActionResult BlogInsert()
-		{
-			var values = CategoryList();
-			ViewBag.value = values;
-			return View();
-		}
-		[HttpPost]
-		public IActionResult BlogInsert(Blog blog)
-		{
-			BlogValidator validations = new BlogValidator();
-			ValidationResult result = validations.Validate(blog);
-			if (result.IsValid)
-			{
-				var writer=_writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
-				blog.WriterID = writer.WriterID;
-				blog.BlogCreateDate=System.DateTime.Now;
-				_blogService.TInsert(blog);
-				return RedirectToAction("BlogListByWriter", "Blog");
-			}
-			else
-			{
-				foreach (var item in result.Errors)
-				{
-					ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-				}
-			}
-			var values = CategoryList();
-			ViewBag.value = values;
-			return View(blog);		
-		}
-		public IActionResult BlogDelete(int id)
-		{
-			Blog temp = _blogService.TGetList(x => x.BlogID == id).FirstOrDefault();
-			_blogService.TDelete(temp);
-			return RedirectToAction("BlogListByWriter","Blog");
-		}
-		[HttpGet]
-		public IActionResult BlogUpdate(int id)
-		{	
+        [AllowAnonymous]
+        //Blog Detaylarının Listelenmesi
+        public IActionResult BlogReadMore(int id=1)
+        {
+            var values = _blogService.TGetById(id);
+            ViewBag.id = id;
+            if (values!=null)
+                ViewBag.writerid=values.WriterID;
+            return View(values);
+        }
+        [AllowAnonymous]
+        //Yazarın Bloglarının listelenmesi
+        public IActionResult BlogListByWriter()
+        {
+            var VerifiedAuthor = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
+            var values = _blogService.TGetBlogListByWriter(VerifiedAuthor.WriterID);
+            return View(values);
+        }
+        [HttpGet]
+        public IActionResult BlogInsert()
+        {
+            var values = CategoryList();
+            ViewBag.value = values;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult BlogInsert(Blog blog)
+        {
+            BlogValidator validations = new BlogValidator();
+            ValidationResult result = validations.Validate(blog);
+            if (result.IsValid)
+            {
+                var writer = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
+                blog.WriterID = writer.WriterID;
+                blog.BlogCreateDate=System.DateTime.Now;
+                _blogService.TInsert(blog);
+                return RedirectToAction("BlogListByWriter", "Blog");
+            }
+            else
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+            }
+            var values = CategoryList();
+            ViewBag.value = values;
+            return View(blog);
+        }
+        public IActionResult BlogDelete(int id)
+        {
+            Blog temp = _blogService.TGetList(x => x.BlogID == id).FirstOrDefault();
+            _blogService.TDelete(temp);
+            return RedirectToAction("BlogListByWriter", "Blog");
+        }
+        [HttpGet]
+        public IActionResult BlogUpdate(int id)
+        {
 
-			var values=_blogService.TGetById(id);
-			var CategoryValues = CategoryList();
-			ViewBag.value = CategoryValues;
-			return View(values);
-		}
-		[HttpPost]
-		public IActionResult BlogUpdate(Blog blog)
-		{
-			BlogValidator validations = new BlogValidator();
-			ValidationResult result = validations.Validate(blog);
-			if (result.IsValid)
-			{
-				_blogService.TUpdate(blog);
-				return RedirectToAction("BlogListByWriter","Blog");
-			}
-			else
-			{
-				foreach (var item in result.Errors)
-				{
-					ModelState.AddModelError(item.PropertyName,item.ErrorMessage);
-				}
-			}
-			var values = CategoryList();	
-			ViewBag.value = values;
-			return View(blog);
+            var values = _blogService.TGetById(id);
+            var CategoryValues = CategoryList();
+            ViewBag.value = CategoryValues;
+            return View(values);
+        }
+        [HttpPost]
+        public IActionResult BlogUpdate(Blog blog)
+        {
+            BlogValidator validations = new BlogValidator();
+            ValidationResult result = validations.Validate(blog);
+            if (result.IsValid)
+            {
+                _blogService.TUpdate(blog);
+                return RedirectToAction("BlogListByWriter", "Blog");
+            }
+            else
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+            }
+            var values = CategoryList();
+            ViewBag.value = values;
+            return View(blog);
 
-		}
-		private List<SelectListItem> CategoryList()
-		{
-			var values = (from x in _categoryService.TGetList()
-						  select new SelectListItem
-						  {
-							  Text = x.CategoryName,
-							  Value = x.CategoryID.ToString()
-						  }).ToList();
-			return values;
-		}
-		public IActionResult ChangeBlogStatus(int id)
-		{
-			var values = _blogService.TGetById(id);
-			bool status = values.BlogStatus;
-			values.BlogStatus=status ==true ? false : true;
+        }
+        private List<SelectListItem> CategoryList()
+        {
+            var values = (from x in _categoryService.TGetList()
+                          select new SelectListItem
+                          {
+                              Text = x.CategoryName,
+                              Value = x.CategoryID.ToString()
+                          }).ToList();
+            return values;
+        }
+        public IActionResult ChangeBlogStatus(int id)
+        {
+            var values = _blogService.TGetById(id);
+            bool status = values.BlogStatus;
+            values.BlogStatus=status ==true ? false : true;
 
-			_blogService.TUpdate(values);
-			return RedirectToAction("BlogListByWriter", "Blog");
-		}
+            _blogService.TUpdate(values);
+            return RedirectToAction("BlogListByWriter", "Blog");
+        }
 
-		//GOTO 
-		//YORUM SAYISI LİSTELENECEK 
-	}
+        //GOTO 
+        //YORUM SAYISI LİSTELENECEK 
+    }
 }

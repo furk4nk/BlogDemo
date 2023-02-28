@@ -13,6 +13,7 @@ namespace BlogDemo.ViewComponents.Dashboard
         {
             _blogService = blogService;
             _writerService = writerService;
+
         }
 
         public IViewComponentResult Invoke()

@@ -49,21 +49,28 @@ namespace BlogDemo.Controllers
                 ValidationResult result = validations.Validate(writer);
                 if (result.IsValid)
                 {
-                    if (model.WriterImage!=null)
+                    if (!_writerService.IsWriterControl(model.WriterMail))
                     {
-                        var extension = Path.GetExtension(model.WriterImage.FileName);
-                        var newImageName = Guid.NewGuid()+extension;
-                        var location = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/writerImageFile",newImageName);
-                        var stream = new FileStream(location, FileMode.Create);
-                        model.WriterImage.CopyTo(stream);
-                        writer.WriterImage= newImageName;
-                        _writerService.TInsert(writer, writer.WriterPassword);
-                        return View();
+                        if (model.WriterImage!=null)
+                        {
+                            var extension = Path.GetExtension(model.WriterImage.FileName);
+                            var newImageName = Guid.NewGuid()+extension;
+                            var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/writerImageFile", newImageName);
+                            var stream = new FileStream(location, FileMode.Create);
+                            model.WriterImage.CopyTo(stream);
+                            writer.WriterImage= newImageName;
+                            _writerService.TInsert(writer, writer.WriterPassword);
+                            return View();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Lütfen Bir Dosya Seçiniz");
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Lütfen Bir Dosya Seçiniz");
-                    }
+                        ModelState.AddModelError("","Bu Mail Adresi sistemde kayıtlı");
+                    }           
                 }
                 else
                 {
