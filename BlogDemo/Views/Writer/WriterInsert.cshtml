@@ -7,7 +7,7 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Yazar Kayıt Sayfası</h4> </br>
+            <h4 class="card-title">Yazar Kayıt Sayfası</h4> <br/>
             <form class="forms-sample" method="post" asp-action="WriterInsert" asp-controller="Writer" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="exampleInputName1">Ad &amp; Soyad</label>
@@ -55,12 +55,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function togglePass(a){
-        let element = document.getElementById('passwordIn'+a);
-        element.type = element.type=='password' ? 'text' : 'password';
-    }
-</script>
 
 

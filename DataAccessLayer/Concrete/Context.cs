@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +15,21 @@ namespace DataAccessLayer.Concrete
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("server=FN-515AN_FURKAN;database=DbBlog;Integrated Security=True;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Message2>()
+                .HasOne(x => x.SenderUser)
+                .WithMany(y => y.WriterSender)
+                .HasForeignKey(z => z.SenderID)
+                .OnDelete(deleteBehavior: DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Message2>()
+                .HasOne(x => x.ReceiverUser)
+                .WithMany(y => y.WriterReceiver)
+                .HasForeignKey(z => z.ReceiverID)
+                .OnDelete(deleteBehavior: DeleteBehavior.ClientSetNull);
         }
         public DbSet<About> abouts { get; set; }
         public DbSet<Blog> blogs { get; set; }
@@ -27,5 +44,6 @@ namespace DataAccessLayer.Concrete
         public DbSet<BlogRayting> blogRaytings { get; set; }
         public DbSet<Notification> notifications { get; set; }
         public DbSet<Message> messages { get; set; }
-    }   
+        public DbSet<Message2> message2s { get; set; }
+    }
 }

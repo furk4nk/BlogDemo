@@ -25,5 +25,11 @@ namespace DataAccessLayer.Abstract
         /// <param name="mail">yazar E-mail </param>
         /// <returns>eğer yazar sistemde kayıtlıysa false dönder</returns>
         bool IsWriterControl(string mail);
+        /// <summary>
+        /// güncellenecek yazarın hash algoritmasına girmsiyle hashli şifreyle sistemde update olması
+        /// </summary>
+        /// <param name="writer">Writer bilgileri</param>
+        /// <param name="newPassword">Hashlenecek yeni şifre</param>
+        void Update(Writer writer, string newPassword);
     }
 }

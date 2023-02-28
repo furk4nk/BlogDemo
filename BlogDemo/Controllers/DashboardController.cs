@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Claims;
 
 namespace BlogDemo.Controllers
 {
@@ -20,7 +21,7 @@ namespace BlogDemo.Controllers
 
         public IActionResult Index()
 		{
-			var author= _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
+			var author = _writerService.TGetById(int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value));
 			ViewBag.author = author;
 			ViewBag.WriterMail=author.WriterMail;
 			ViewBag.blogcount = _blogService.TBlogCount;

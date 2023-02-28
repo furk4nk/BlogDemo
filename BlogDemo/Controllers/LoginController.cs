@@ -34,21 +34,22 @@ namespace BlogDemo.Controllers
 			}
 			return View();
 		}
-
 		[HttpPost]
 		public async Task<IActionResult> Index(UserLoginViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				var uservalues = _writerService.TGetList(x => x.WriterMail == model.Email);
-				if (uservalues.Count != 0)
+				var uservalues = _writerService.TGetList(x => x.WriterMail == model.Email).FirstOrDefault();
+				if (uservalues !=null)
 				{
-					var result = BCrypt.Net.BCrypt.Verify(model.Password, uservalues[0].WriterPassword);
+					var result = BCrypt.Net.BCrypt.Verify(model.Password, uservalues.WriterPassword);
 					if (result == true)
 					{
 						List<Claim> claims = new List<Claim>
 						{
-							new Claim(ClaimTypes.Name,model.Email),
+							new Claim(ClaimTypes.Name,uservalues.WriterName),
+                            new Claim(ClaimTypes.NameIdentifier,uservalues.WriterID.ToString()),
+                            new Claim(ClaimTypes.Email,model.Email)
 						};
 						ClaimsIdentity userIdentity=new ClaimsIdentity(claims,"a ");
 						ClaimsPrincipal principal= new ClaimsPrincipal(userIdentity);

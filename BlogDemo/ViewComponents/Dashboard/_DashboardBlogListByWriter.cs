@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.Abstract;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 
 namespace BlogDemo.ViewComponents.Dashboard
 {
@@ -18,7 +20,8 @@ namespace BlogDemo.ViewComponents.Dashboard
 
         public IViewComponentResult Invoke()
         {
-            var author = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
+            int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
+            EntityLayer.Concrete.Writer author = _writerService.TGetById(id);
             var values = _blogService.TGetRecentBlogListByWriter(id: author.WriterID, 4); 
             return View(values);
         }

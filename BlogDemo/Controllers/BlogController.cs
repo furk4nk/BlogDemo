@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace BlogDemo.Controllers
         private readonly IBlogService _blogService;
         private readonly IWriterService _writerService;
         private readonly ICategoryService _categoryService;
+        private Writer _authorUser => AuthorUser();
         public BlogController(IBlogService blogService, IWriterService writerService, ICategoryService categoryService)
         {
             _blogService = blogService;
@@ -49,7 +51,7 @@ namespace BlogDemo.Controllers
         //Yazarın Bloglarının listelenmesi
         public IActionResult BlogListByWriter()
         {
-            var VerifiedAuthor = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
+            var VerifiedAuthor = _authorUser;
             var values = _blogService.TGetBlogListByWriter(VerifiedAuthor.WriterID);
             return View(values);
         }
@@ -66,9 +68,8 @@ namespace BlogDemo.Controllers
             BlogValidator validations = new BlogValidator();
             ValidationResult result = validations.Validate(blog);
             if (result.IsValid)
-            {
-                var writer = _writerService.TGetList(x => x.WriterMail == User.Identity.Name).FirstOrDefault();
-                blog.WriterID = writer.WriterID;
+            {              
+                blog.WriterID = _authorUser.WriterID;
                 blog.BlogCreateDate=System.DateTime.Now;
                 _blogService.TInsert(blog);
                 return RedirectToAction("BlogListByWriter", "Blog");
@@ -139,6 +140,16 @@ namespace BlogDemo.Controllers
 
             _blogService.TUpdate(values);
             return RedirectToAction("BlogListByWriter", "Blog");
+        }
+
+        private Writer AuthorUser()
+        {
+            if (User.Identity.Name!=null)
+            {
+                int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
+                return _writerService.TGetById(1);
+            }
+            return null;
         }
 
         //GOTO 

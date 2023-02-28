@@ -58,5 +58,10 @@ namespace BusinessLayer.Concrete
 		{
 			_writerDal.Update(t);
 		}
-	}
+
+        public void TUpdate(Writer writer, string password)
+        {
+			_writerDal.Update(writer,password);
+        }
+    }
 }

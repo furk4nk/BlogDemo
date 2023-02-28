@@ -1,4 +1,5 @@
-﻿using BlogDemo.Models;
+﻿using BCrypt.Net;
+using BlogDemo.Models;
 using BusinessLayer.Abstract;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
@@ -7,13 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace BlogDemo.Controllers
 {
-    [AllowAnonymous]
+    
     public class WriterController : Controller
     {
         private readonly IWriterService _writerService;
+        private Writer _authorUser => AuthorUser();
 
         public WriterController(IWriterService writerService)
         {
@@ -69,8 +72,8 @@ namespace BlogDemo.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("","Bu Mail Adresi sistemde kayıtlı");
-                    }           
+                        ModelState.AddModelError("", "Bu Mail Adresi sistemde kayıtlı");
+                    }
                 }
                 else
                 {
@@ -86,12 +89,88 @@ namespace BlogDemo.Controllers
         [HttpGet]
         public IActionResult UpdateWriter() // veriler kaydedilirken cityId bilgisi eklenmeklidir
         {
-            return View();
+            Writer values = new Writer();
+            if (User.Identity.Name!=null)
+            {
+                values = _writerService.TGetList(x => x.WriterMail==User.Identity.Name).FirstOrDefault();
+            }
+            return View(values);
         }
+
         [HttpPost]
         public IActionResult UpdateWriter(Writer writer)
         {
+            if (ModelState.IsValid)
+            {
+                WriterValitator validations = new WriterValitator();
+                ValidationResult validation = validations.Validate(writer);
+                if (validation.IsValid)
+                {
+                    writer.CityID=1;
+                    writer.DisctrictID=1;
+                    writer.CountryID=1;
+                    _writerService.TInsert(writer);
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    foreach (var item in validation.Errors)
+                    {
+                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                    }
+                }
+            }
+            return View(writer);
+        }
+
+        [HttpGet]
+        public IActionResult PasswordChange()
+        {
             return View();
+        }
+        [HttpPost]
+        public IActionResult PasswordChange(WriterPasswordChangeViewModel model)
+        {
+            if (BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
+            {   //validasyon kontrolü yapılması gerekiyor yeni şifre kurallara uygun olması gerekiyor
+                Writer writer = _authorUser;
+                writer.WriterPassword=model.newPassword;
+
+                WriterValitator validations = new WriterValitator();
+                ValidationResult result = validations.Validate(writer);
+                if (result.IsValid)
+                {
+                    
+                    if (!BCrypt.Net.BCrypt.Verify(model.oldPassword,_authorUser.WriterPassword))
+                        _writerService.TUpdate(_authorUser, model.newPassword);
+                    else
+                    {
+                        ModelState.AddModelError("", "Yeni Şifreniz Mevcut şifrenizle Aynı olamaz");
+                        return View(model);
+                    }
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    foreach ( var item in result.Errors)
+                    {
+                        ModelState.AddModelError("",item.ErrorMessage);
+                    }
+                }
+            }
+            else  // Şifre yanlış girilirse verilecek uyarı
+            {
+                ModelState.AddModelError("", "Şifreniz yanlış");
+            }
+            return View();
+        }
+        private Writer AuthorUser()
+        {
+            if (User.Identity.Name!=null)
+            {
+                return _writerService.TGetList(x => x.WriterMail==User.Identity.Name).FirstOrDefault();
+            }
+            return null;
         }
     }
 }
