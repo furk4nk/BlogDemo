@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 
 namespace BlogDemo.Controllers
 {
-    
+
     public class WriterController : Controller
     {
         private readonly IWriterService _writerService;
@@ -61,15 +62,16 @@ namespace BlogDemo.Controllers
                             var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/writerImageFile", newImageName);
                             var stream = new FileStream(location, FileMode.Create);
                             model.WriterImage.CopyTo(stream);
-                            writer.WriterImage= newImageName;
-                            _writerService.TInsert(writer, writer.WriterPassword);
+                            writer.WriterImage= "/writerImageFile/"+newImageName;
                             return View();
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Lütfen Bir Dosya Seçiniz");
+                            writer.WriterImage = Path.Combine("/writerImageFile", "user.png");
                         }
-                    }
+
+                        _writerService.TInsert(writer, writer.WriterPassword);
+                    }   
                     else
                     {
                         ModelState.AddModelError("", "Bu Mail Adresi sistemde kayıtlı");
@@ -140,8 +142,8 @@ namespace BlogDemo.Controllers
                 ValidationResult result = validations.Validate(writer);
                 if (result.IsValid)
                 {
-                    
-                    if (!BCrypt.Net.BCrypt.Verify(model.oldPassword,_authorUser.WriterPassword))
+
+                    if (!BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
                         _writerService.TUpdate(_authorUser, model.newPassword);
                     else
                     {
@@ -152,9 +154,9 @@ namespace BlogDemo.Controllers
                 }
                 else
                 {
-                    foreach ( var item in result.Errors)
+                    foreach (var item in result.Errors)
                     {
-                        ModelState.AddModelError("",item.ErrorMessage);
+                        ModelState.AddModelError("", item.ErrorMessage);
                     }
                 }
             }
@@ -168,9 +170,11 @@ namespace BlogDemo.Controllers
         {
             if (User.Identity.Name!=null)
             {
-                return _writerService.TGetList(x => x.WriterMail==User.Identity.Name).FirstOrDefault();
+                int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
+                return _writerService.TGetById(id);
             }
             return null;
         }
     }
 }
+// author user refactor edilecek 02/03/2023

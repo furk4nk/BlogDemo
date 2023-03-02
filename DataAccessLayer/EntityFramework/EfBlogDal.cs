@@ -14,25 +14,25 @@ namespace DataAccessLayer.EntityFramework
 	public class EfBlogDal : GenericRepository<Blog>, IBlogDal
 	{
 		Context c = new Context();
-        public int? BlogCount => c.Set<Blog>().Count();
+		public int? BlogCount => c.Set<Blog>().Count();
 
-        public List<Blog> GetBlogInListAll()
+		public List<Blog> GetBlogInListAll()
 		{
 			using (Context c = new Context())
 			{
 				return c.blogs.Include(x => x.category).ToList();
 			}
 		}
-		public List<Blog> GetLastBlogs(int count=1)
+		public List<Blog> GetLastBlogs(int count = 1)
 		{
 			using (Context c = new Context())
 			{
-				return c.Set<Blog>().OrderByDescending(x => x.BlogCreateDate).Take(count).ToList();
+				return c.Set<Blog>().Where(y => y.BlogStatus==true).OrderByDescending(x => x.BlogCreateDate).Take(count).ToList();
 			}
 		}
 
-        public List<Blog> GetLastBlogsWithCategoryAndWriter(int count)
-        {
+		public List<Blog> GetLastBlogsWithCategoryAndWriter(int count)
+		{
 			using (Context c = new Context())
 			{
 				return c.Set<Blog>().OrderByDescending(x => x.BlogCreateDate)
@@ -40,23 +40,39 @@ namespace DataAccessLayer.EntityFramework
 					.Include(x => x.category)
 					.Include(x => x.writer).ToList();
 			}
-        }
+		}
 
-        public int WriterBlogCount(int id)
-        {
+		public int WriterBlogCount(int id)
+		{
 			using (Context c = new Context())
 			{
 				return c.Set<Blog>().Where(x => x.WriterID == id).Count();
 			}
-        }
-		public List<Blog> GetRecentBlogListByWriter(int id,int count)
+		}
+		public List<Blog> GetRecentBlogListByWriter(int id, int count)
 		{
 			using (Context c = new Context())
 			{
 				return c.Set<Blog>().Where(x => x.WriterID==id)
 					.OrderByDescending(x => x.BlogCreateDate)
 					.Take(count).ToList();
-			}	
+			}
 		}
-    }
+
+		public List<Blog> GetBlogListByWriterWithCategory(int id)
+		{
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().Where(x => x.WriterID == id).Include(y => y.category).ToList();
+			}
+		}
+
+		public List<Blog> GetBlogListByTrue()
+		{
+			using (Context c = new Context())
+			{
+				return c.Set<Blog>().Where(x => x.BlogStatus == true).Include(y => y.category).ToList();
+			}
+		}
+	}
 }

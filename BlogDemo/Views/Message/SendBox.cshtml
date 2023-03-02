@@ -1,20 +1,19 @@
-﻿@using EntityLayer.Concrete
-@model List<Message2>
+﻿
 @{
-    ViewData["Title"] = "InBox";
+    ViewData["Title"] = "SendBox";
     Layout = "~/Views/Shared/_WriterLayout.cshtml";
 }
 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Mesaj Listesi</h4> <br />
+            <h4 class="card-title">Giden Mesaj Listesi</h4> <br />
             <table class="table">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Konu</th>
-                        <th>Gönderen</th>
+                        <th>Alıcı</th>
                         <th>Tarih</th>
                         <th>Detay</th>
                     </tr>
@@ -25,13 +24,14 @@
                         <tr>
                             <td>@item.ID</td>
                             <td>@item.Subject</td>
-                            <td>@item.SenderUser.WriterName</td>
+                            <td>@item.ReceiverUser.WriterName</td>
                             <td>@(((DateTime)item.MessageDate).ToString("dd MMM yyyy"))</td>
-                            <td><a href="/Message/MessageDetails/@item.ID" class="btn btn-inverse-primary">Mesajı Gör</a></td>
+                            <td><a href="/Message/SendBoxDetails/@item.ID" class="btn btn-inverse-primary">Mesajı Gör</a></td>
                         </tr>
                     }
                 </tbody>
             </table>
+            <a href="/Message/SendMessage" class="btn btn-outline-primary">Yeni Mesaj ekle</a>
         </div>
     </div>
 </div>

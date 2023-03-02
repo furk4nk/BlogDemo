@@ -38,7 +38,7 @@ namespace BusinessLayer.FluentValidation
 
 			//Writer About rules
 			RuleFor(x => x.WriterAbout).NotEmpty().WithMessage("Hakkında Alanını Doldurunuz")
-				.MinimumLength(130).WithMessage("En Az 130 Karakter Girmelisiniz")
+				.MinimumLength(15).WithMessage("En Az 15 Karakter Girmelisiniz")
 				.MaximumLength(5000).WithMessage("En Fazla 5000 Karakter Girmelisiniz");
 
 

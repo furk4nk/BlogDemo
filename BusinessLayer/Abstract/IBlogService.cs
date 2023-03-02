@@ -10,7 +10,7 @@ namespace BusinessLayer.Abstract
     public interface IBlogService : IGenericService<Blog>
     {
         /// <summary>
-        /// blogları Include eder
+        /// Category Tablosunu Include ederek Blog Listesini Döndürür
         /// </summary>
         /// <returns> blog listesi</returns>
         List<Blog> TGetBlogInListAll();
@@ -23,7 +23,20 @@ namespace BusinessLayer.Abstract
         List<Blog> TGetBlogListByWriter(int id);
 
         /// <summary>
-        /// Tüm Bloglar arasında Tarih sıralaması yaparak en son paylaşılan Blogları Parametreye Göre çağırır
+        /// Durumu True Olan Blogları Döndürür Category Tablosunu Include eder
+        /// </summary>
+        /// <returns>Blog Listesi</returns>
+        List<Blog> TGetBlogListByTrue();
+
+        /// <summary>
+        /// Yazarın Tüm bloglarını kategorileri include ederek getirir
+        /// </summary>
+        /// <param name="id">Yazar ID</param>
+        /// <returns></returns>
+        List<Blog> TGetBlogListByWriterWithCategory(int id);
+
+        /// <summary>
+        /// Tüm Bloglar arasında Durumu true olan bloglar arasında Tarih sıralaması yaparak en son paylaşılan Blogları Parametreye Göre çağırır
         /// </summary>
         /// <param name="count">Kaç Blog Listelenecek</param>
         /// <returns>Blog Listesi</returns>

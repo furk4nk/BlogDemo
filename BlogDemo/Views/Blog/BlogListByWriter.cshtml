@@ -43,7 +43,7 @@ else
 					<td>@item.BlogID</td>
 					<td>@item.BlogTitle</td>
 					<td>@item.BlogCreateDate.ToShortDateString()</td>
-					<td>@item.CategoryID</td>
+					<td>@item.category.CategoryName</td>
 					@if (durum == "Aktif")                             @*buton yardımıyla aktif veya pasif olarak ayarlanabilir*@
 					{
 						<td><a href="/Blog/ChangeBlogStatus/@item.BlogID" class="btn btn-outline-success">@durum</a></td>

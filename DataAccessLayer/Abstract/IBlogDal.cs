@@ -15,6 +15,8 @@ namespace DataAccessLayer.Abstract
 		int? BlogCount { get; }
 		int WriterBlogCount(int id);
 		List<Blog> GetRecentBlogListByWriter(int id,int count);
+		List<Blog> GetBlogListByTrue();
+		List<Blog> GetBlogListByWriterWithCategory(int id);
     }
 }
 	

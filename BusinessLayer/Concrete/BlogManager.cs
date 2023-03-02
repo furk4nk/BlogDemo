@@ -79,5 +79,15 @@ namespace BusinessLayer.Concrete
         {
             return _blogDal.GetRecentBlogListByWriter(id, count);
         }
+
+        public List<Blog> TGetBlogListByWriterWithCategory(int id)
+        {
+            return _blogDal.GetBlogListByWriterWithCategory(id);
+        }
+
+        public List<Blog> TGetBlogListByTrue()
+        {
+            return _blogDal.GetBlogListByTrue(); 
+        }
     }
 }

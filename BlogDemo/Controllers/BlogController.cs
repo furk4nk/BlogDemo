@@ -4,15 +4,10 @@ using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
 {
@@ -22,7 +17,7 @@ namespace BlogDemo.Controllers
         private readonly IBlogService _blogService;
         private readonly IWriterService _writerService;
         private readonly ICategoryService _categoryService;
-        private Writer _authorUser => AuthorUser();
+        private int _authorUserID => AuthorUser();
         public BlogController(IBlogService blogService, IWriterService writerService, ICategoryService categoryService)
         {
             _blogService = blogService;
@@ -33,7 +28,7 @@ namespace BlogDemo.Controllers
         //Blogların Ana Sayfada Listelenmesi
         public IActionResult Index()
         {
-            List<Blog> values = _blogService.TGetBlogInListAll();
+            List<Blog> values = _blogService.TGetBlogListByTrue();
             return View(values);
         }
 
@@ -51,8 +46,7 @@ namespace BlogDemo.Controllers
         //Yazarın Bloglarının listelenmesi
         public IActionResult BlogListByWriter()
         {
-            var VerifiedAuthor = _authorUser;
-            var values = _blogService.TGetBlogListByWriter(VerifiedAuthor.WriterID);
+            var values = _blogService.TGetBlogListByWriterWithCategory(_authorUserID);
             return View(values);
         }
         [HttpGet]
@@ -69,7 +63,7 @@ namespace BlogDemo.Controllers
             ValidationResult result = validations.Validate(blog);
             if (result.IsValid)
             {              
-                blog.WriterID = _authorUser.WriterID;
+                blog.WriterID = _authorUserID;
                 blog.BlogCreateDate=System.DateTime.Now;
                 _blogService.TInsert(blog);
                 return RedirectToAction("BlogListByWriter", "Blog");
@@ -142,14 +136,13 @@ namespace BlogDemo.Controllers
             return RedirectToAction("BlogListByWriter", "Blog");
         }
 
-        private Writer AuthorUser()
+        private int AuthorUser()
         {
             if (User.Identity.Name!=null)
             {
-                int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
-                return _writerService.TGetById(1);
+                return int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
             }
-            return null;
+            return 0;
         }
 
         //GOTO 

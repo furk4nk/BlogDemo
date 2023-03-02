@@ -1,13 +1,13 @@
 ﻿@model EntityLayer.Concrete.Message2
 @{
-    ViewData["Title"] = "MessageDetails";
+    ViewData["Title"] = "SendBoxDetails";
     Layout = "~/Views/Shared/_WriterLayout.cshtml";
 }
 
 <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Mesaj İçeriği</h4><br/>
+            <h4 class="card-title">Gönderilen Mesajın İçeriği</h4><br />
 
             <form class="forms-sample">
                 <div class="form-group">
@@ -15,16 +15,16 @@
                     <input type="text" class="form-control" disabled="disabled" asp-for="Subject">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Gönderen</label>
-                    <input type="email" class="form-control" disabled="disabled" asp-for="SenderUser.WriterName">
+                    <label for="exampleInputEmail1">Alıcı</label>
+                    <input type="email" class="form-control" disabled="disabled" asp-for="ReceiverUser.WriterName">
                 </div>
                 <div class="form-group">
                     <label>İçerik</label>
-                    <textarea cols="10" rows="10" class="form-control" disabled="disabled" asp-for="MessageContent">
-                    </textarea>
+                    <textarea cols="10" rows="10" class="form-control" disabled="disabled" asp-for="MessageContent"></textarea>
                 </div>
-                <a href="/Message/InBox" class="btn btn-outline-behance">Geri Dön</a>
+                <a href="/Message/SendBox" class="btn btn-outline-behance">Geri Dön</a>
             </form>
         </div>
     </div>
 </div>
+

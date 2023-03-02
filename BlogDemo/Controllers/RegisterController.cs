@@ -15,6 +15,7 @@ using System.Linq;
 
 namespace BlogDemo.Controllers
 {
+	[AllowAnonymous]
 	public class RegisterController : Controller
 	{
 		CountryManager country = new CountryManager(new EfCountryDal());
@@ -64,7 +65,7 @@ namespace BlogDemo.Controllers
 			ViewBag.v2 = CityList(1);
 			return View();
 		}
-		public List<SelectListItem> CountryList()
+		private List<SelectListItem> CountryList()
 		{
 			List<SelectListItem> liste = (from x in country.TGetList()
 										  orderby x.CountryName ascending
@@ -75,7 +76,7 @@ namespace BlogDemo.Controllers
 										  }).ToList();
 			return liste;
 		}
-		public List<SelectListItem> CityList(int id)
+		private List<SelectListItem> CityList(int id)
 		{
 			List<SelectListItem> liste = (from x in cm.TGetList(x=>x.CountryID==id)
 										   orderby x.CityName ascending

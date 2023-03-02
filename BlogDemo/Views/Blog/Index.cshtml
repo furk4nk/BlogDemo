@@ -1,62 +1,66 @@
 ﻿@using EntityLayer.Concrete
 @model List<Blog>
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_UILayout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
 }
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <section class="main-content-w3layouts-agileits">
-	<div class="container">
-		<h3 class="tittle">Bloglar</h3>
-		<div class="inner-sec">
-			<!--left-->
-			<div class="left-blog-info-w3layouts-agileits text-left">
-				<div class="row">
+    <div class="container">
+        <h3 class="tittle">Bloglar</h3>
+        <div class="inner-sec">
+            <!--left-->
+            <div class="left-blog-info-w3layouts-agileits text-left">
+                <div class="row">
 
-					@foreach (var item in Model)
-					{
-						<div id="content" class="col-lg-4 card">
-							<a href="single.html">
-								<img src="@item.BlogThumbNailImage" class="card-img-top img-fluid" alt="">
-							</a>
-							<div class="card-body">
-								<ul class="blog-icons my-4">
-									<li>
-										<a href="#">
-											<i class="far fa-calendar-alt"></i> @item.BlogCreateDate.ToShortDateString()
-										</a>
-									</li>
-									<li class="mx-2">
-										<a href="#">
-											<i class="far fa-comment"></i> 0 yorum
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<i class="fas fa-border-all"></i> @item.category.CategoryName
-										</a>
-									</li>
+                    @foreach (var item in Model)
+                    {
+                        <div id="content" class="col-lg-4 card">
+                            <a href="single.html">
+                                <img src="@item.BlogThumbNailImage" class="card-img-top img-fluid" alt="">
+                            </a>
+                            <div class="card-body">
+                                <ul class="blog-icons my-4">
+                                    <li>
+                                        <a href="#">
+                                            <i class="far fa-calendar-alt"></i> @item.BlogCreateDate.ToShortDateString()
+                                        </a>
+                                    </li>
+                                    <li class="mx-2">
+                                        <a href="#">
+                                            <i class="far fa-comment"></i> 0 yorum
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fas fa-border-all"></i> @item.category.CategoryName
+                                        </a>
+                                    </li>
 
-								</ul>
-								<h5 class="card-title">
-									<a href="/Blog/BlogReadMore/@item.BlogID">@item.BlogTitle</a>
-								</h5>
-								<p class="card-text mb-3">@item.BlogContext.Substring(0,item.BlogContext.Substring(0,120).LastIndexOf(" "))..</p>
-								<a href="/Blog/BlogReadMore/@item.BlogID" class="btn btn-primary read-m">Devamını Oku</a>
-							</div>
-						</div>
-					}
-					<script>
-						var Etiket = document.getElementsByClassName("col-lg-4");
-						if (Etiket[3] != null) Etiket[3].classList.add('col-lg-4', 'card', 'my-lg-4', 'my-md-1', 'my-0');
-						if (Etiket[4] != null) Etiket[4].classList.add('my-4');
-						if (Etiket[5] != null) Etiket[5].classList.add('col-lg-4', 'card', 'my-lg-4', 'my-md-1', 'my-0');
-					</script>
+                                </ul>
+                                <h5 class="card-title">
+                                    <a href="/Blog/BlogReadMore/@item.BlogID">@item.BlogTitle</a>
+                                </h5>
+                                @if (item.BlogContext.Contains(" "))
+                                {
+                                    <p class="card-text mb-3">@item.BlogContext.Substring(0,item.BlogContext.Substring(0,120).LastIndexOf(" "))..</p>
+                                }
 
-				</div>
-				<!--//left-->
-			</div>
-		</div>
-	</div>
+                                <a href="/Blog/BlogReadMore/@item.BlogID" class="btn btn-primary read-m">Devamını Oku</a>
+                            </div>
+                        </div>
+                    }
+                    <script>
+                        var Etiket = document.getElementsByClassName("col-lg-4");
+                        if (Etiket[3] != null) Etiket[3].classList.add('col-lg-4', 'card', 'my-lg-4', 'my-md-1', 'my-0');
+                        if (Etiket[4] != null) Etiket[4].classList.add('my-4');
+                        if (Etiket[5] != null) Etiket[5].classList.add('col-lg-4', 'card', 'my-lg-4', 'my-md-1', 'my-0');
+                    </script>
+
+                </div>
+                <!--//left-->
+            </div>
+        </div>
+    </div>
 </section>
 
