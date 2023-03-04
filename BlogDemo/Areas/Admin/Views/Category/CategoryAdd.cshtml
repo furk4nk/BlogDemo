@@ -1,0 +1,29 @@
+﻿@model EntityLayer.Concrete.Category
+@{
+    ViewData["Title"] = "CategoryAdd";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="ibox-content">
+    <div class="row">
+        <div class="col-sm-12 ">
+            <h3 class="m-t-none m-b">Kategori Ekle</h3>
+            <form role="form" method="post">
+                <div class="form-group">
+                    <label>Kategori Adı</label>
+                    <span class="text-danger" asp-validation-for="CategoryName"></span>
+                    <input type="text" name="CategoryName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Kategori Açıklama</label>
+                    <span class="text-danger" asp-validation-for="CategoryDescription"></span>
+                    <textarea class="form-control" cols="10" rows="10" name="CategoryDescription"></textarea>
+                </div>
+                <div>
+                    <a href="/Admin/Category/Index" class="btn btn-white">Vazgeç</a>
+                    <button class="btn btn-primary" type="submit"><strong>Ekle</strong></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

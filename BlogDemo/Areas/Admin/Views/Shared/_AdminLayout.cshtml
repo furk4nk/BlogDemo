@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    @await Html.PartialAsync("~/Areas/Admin/Views/Admin/AdminHeadPartial.cshtml")
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        @await Html.PartialAsync("~/Areas/Admin/Views/Admin/AdminSidebarPartial.cshtml")
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                @await Html.PartialAsync("~/Areas/Admin/Views/Admin/AdminNavbarPartial.cshtml")
+            </div>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                @RenderBody()
+            </div>
+            
+            @await Html.PartialAsync("~/Areas/Admin/Views/Admin/AdminFooterPartial.cshtml")
+
+        </div>
+    </div>
+
+
+
+    @await Html.PartialAsync("~/Areas/Admin/Views/Admin/AdminScriptPartial.cshtml")
+
+</body>
+
+</html>

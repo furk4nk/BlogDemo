@@ -21,7 +21,7 @@ namespace BlogDemo.Controllers
             _writerService = writerService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() // User Authentication after ımage photo does not exists
 		{
 			ViewBag.author = _authorUser;
 			ViewBag.writername=_authorUser.WriterName;
