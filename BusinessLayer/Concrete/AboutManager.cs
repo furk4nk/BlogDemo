@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             return _AboutDal.GetById(ID);
         }
 
+        public int TGetCount(Expression<Func<About, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<About> TGetList()
         {
             return _AboutDal.GetList();

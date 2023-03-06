@@ -89,5 +89,10 @@ namespace BusinessLayer.Concrete
         {
             return _blogDal.GetBlogListByTrue(); 
         }
+
+        public int TGetCount(Expression<Func<Blog, bool>> filter = null )
+        {
+            return _blogDal.GetCount(filter);
+        }
     }
 }

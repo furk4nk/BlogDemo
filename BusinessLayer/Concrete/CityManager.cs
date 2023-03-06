@@ -29,7 +29,12 @@ namespace BusinessLayer.Concrete
 			throw new NotImplementedException();
 		}
 
-		public List<City> TGetList()
+        public int TGetCount(Expression<Func<City, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<City> TGetList()
 		{
 			return _cityDal.GetList();
 		}

@@ -15,6 +15,7 @@ namespace BusinessLayer.Abstract
         void TInsert(T t);
         void TUpdate(T t);
         T TGetById(int ID);
+        int TGetCount(Expression<Func<T,bool>> filter = null);
         List<T> TGetList(Expression<Func<T,bool>>filter);
 
     }

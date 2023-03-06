@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
+        public int TGetCount(Expression<Func<Notification, bool>> filter)
+        {
+            return _notificationDal.GetCount(filter);
+        }
+
         public List<Notification> TGetList()
         {
             return _notificationDal.GetList();

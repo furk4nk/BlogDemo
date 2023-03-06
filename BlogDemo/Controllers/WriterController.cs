@@ -44,7 +44,7 @@ namespace BlogDemo.Controllers
                     WriterMail= model.WriterMail,
                     WriterName= model.WriterName,
                     WriterPassword= model.WriterPassword,
-                    WriterStatus=model.WriterStatus,
+                    WriterStatus=true,
                     CityID=1,
                     CountryID=1,
                     DisctrictID=1
@@ -69,8 +69,8 @@ namespace BlogDemo.Controllers
                         {
                             writer.WriterImage = Path.Combine("/writerImageFile", "user.png");
                         }
-
-                        _writerService.TInsert(writer, writer.WriterPassword);
+                       
+                        _writerService.TInsert(writer);
                     }   
                     else
                     {
@@ -94,7 +94,7 @@ namespace BlogDemo.Controllers
             Writer values = new Writer();
             if (User.Identity.Name!=null)
             {
-                values = _writerService.TGetList(x => x.WriterMail==User.Identity.Name).FirstOrDefault();
+                 values = _writerService.TGetById(_authorUser.WriterID);
             }
             return View(values);
         }
@@ -111,6 +111,7 @@ namespace BlogDemo.Controllers
                     writer.CityID=1;
                     writer.DisctrictID=1;
                     writer.CountryID=1;
+                    writer.WriterStatus=true;
                     _writerService.TInsert(writer);
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -135,16 +136,19 @@ namespace BlogDemo.Controllers
         {
             if (BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
             {   //validasyon kontrolü yapılması gerekiyor yeni şifre kurallara uygun olması gerekiyor
-                Writer writer = _authorUser;
-                writer.WriterPassword=model.newPassword;
+                Writer Ctrlwriter = _authorUser;  // kkontrol edeceğimiz yazar değerleri
+                Ctrlwriter.WriterPassword=model.newPassword;
 
                 WriterValitator validations = new WriterValitator();
-                ValidationResult result = validations.Validate(writer);
+                ValidationResult result = validations.Validate(Ctrlwriter);
                 if (result.IsValid)
                 {
 
                     if (!BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
-                        _writerService.TUpdate(_authorUser, model.newPassword);
+                    {
+                        _authorUser.WriterPassword=model.newPassword;
+                        _writerService.TUpdate(_authorUser);
+                    }
                     else
                     {
                         ModelState.AddModelError("", "Yeni Şifreniz Mevcut şifrenizle Aynı olamaz");

@@ -29,7 +29,12 @@ namespace BusinessLayer.Concrete
 			throw new NotImplementedException();
 		}
 
-		public List<NewsLetter> TGetList()
+        public int TGetCount(Expression<Func<NewsLetter, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<NewsLetter> TGetList()
 		{
 			throw new NotImplementedException();
 		}

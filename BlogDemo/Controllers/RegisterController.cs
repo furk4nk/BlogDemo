@@ -51,7 +51,7 @@ namespace BlogDemo.Controllers
 			ValidationResult result = validations.Validate(writer);
 			if (result.IsValid)
 			{
-				_writerService.TInsert(writer,model.WriterPassword);
+				_writerService.TInsert(writer);
 				return RedirectToAction("Index", "Blog");
 			}
 			else

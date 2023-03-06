@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             return _categoryDal.GetById(ID);
         }
 
+        public int TGetCount(Expression<Func<Category, bool>> filter = null)
+        {
+            return _categoryDal.GetCount(filter);
+        }
+
         public List<Category> TGetList()
         {
             return _categoryDal.GetList();

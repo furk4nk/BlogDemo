@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             return _commentDal.GetById(ID);
         }
 
+        public int TGetCount(Expression<Func<Comment, bool>> filter = null)
+        {
+            return _commentDal.GetCount(filter);
+        }
+
         public List<Comment> TGetList()
         {
             return _commentDal.GetList();

@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             return _contactDal.GetById(ID);
         }
 
+        public int TGetCount(Expression<Func<Contact, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Contact> TGetList()
         {
             return _contactDal.GetList();

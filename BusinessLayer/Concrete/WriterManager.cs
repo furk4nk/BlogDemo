@@ -34,7 +34,12 @@ namespace BusinessLayer.Concrete
 			return _writerDal.GetById(ID);
 		}
 
-		public List<Writer> TGetList()
+        public int TGetCount(Expression<Func<Writer, bool>> filter)
+        {
+            return _writerDal.GetCount(filter);	
+        }
+
+        public List<Writer> TGetList()
 		{
 			return _writerDal.GetList();
 		}
@@ -49,19 +54,9 @@ namespace BusinessLayer.Concrete
 			_writerDal.Insert(t);
 		}
 
-		public void TInsert(Writer t, string password)
-		{
-			_writerDal.Insert(t,password);
-		}
-
 		public void TUpdate(Writer t)
 		{
 			_writerDal.Update(t);
 		}
-
-        public void TUpdate(Writer writer, string password)
-        {
-			_writerDal.Update(writer,password);
-        }
     }
 }

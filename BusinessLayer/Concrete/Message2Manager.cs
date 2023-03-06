@@ -74,5 +74,10 @@ namespace BusinessLayer.Concrete
         {
             return _messageDal.GetID(mail);
         }
+
+        public int TGetCount(Expression<Func<Message2, bool>> filter =null)
+        {
+            return _messageDal.GetCount(filter);
+        }
     }
 }

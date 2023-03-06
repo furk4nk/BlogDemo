@@ -12,24 +12,10 @@ namespace DataAccessLayer.Abstract
     public interface IWriterDal : IGenericDal<Writer>
     {
         /// <summary>
-        /// HASH algoritması ile şifreyi Hash ile gönderen metot
-        /// </summary>
-        /// <param name="writer">kullanıcı bilgileri</param>
-        /// eklenecek kullanıcının verileri
-        /// <param name="passord">kullanıcının hash ile gitmesi gereken verisi</param>
-        /// eklenecek kullanıcının şifrelenmesi gereken kullanıcı şifresi
-        void Insert(Writer writer, string password);
-        /// <summary>
         /// Yazar mailine göre kullanıcı kontrolü 
         /// </summary>
         /// <param name="mail">yazar E-mail </param>
         /// <returns>eğer yazar sistemde kayıtlıysa false dönder</returns>
         bool IsWriterControl(string mail);
-        /// <summary>
-        /// güncellenecek yazarın hash algoritmasına girmsiyle hashli şifreyle sistemde update olması
-        /// </summary>
-        /// <param name="writer">Writer bilgileri</param>
-        /// <param name="newPassword">Hashlenecek yeni şifre</param>
-        void Update(Writer writer, string newPassword);
     }
 }
