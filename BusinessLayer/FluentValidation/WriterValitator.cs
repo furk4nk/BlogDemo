@@ -43,15 +43,7 @@ namespace BusinessLayer.FluentValidation
 
 
 			//WriterImage rules
-			//RuleFor(x => x.WriterImage).NotEmpty().WithMessage("Bir Resim Seçiniz");
-
-
-            //city rules
-            RuleFor(x => x.CityID).GreaterThanOrEqualTo(0).WithMessage("Lütfen Şehir Seçiniz");
-
-
-			//country rules
-			RuleFor(x => x.CountryID).GreaterThanOrEqualTo(0).WithMessage("Lütfen Ülke Seçiniz");
+			//RuleFor(x => x.WriterImage).NotEmpty().WithMessage("Bir Resim Seçiniz);
 		}
 	}
 }

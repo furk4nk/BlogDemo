@@ -1,5 +1,8 @@
-﻿using BusinessLayer.Abstract;
+﻿using BlogDemo.Areas.Admin.Models;
+using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace BlogDemo.Areas.Admin.Controllers
 {
@@ -17,10 +20,15 @@ namespace BlogDemo.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult GetChartList()
+        [HttpGet]
+        public IActionResult GetChartList() // count= kategoriyi kaç tane blog kullanıyor 
         {
-            var values = _categoryService.TGetList();
-            return Json("");
+            var values = _categoryService.TGetList().Select(x => new CategoryChartModel
+            {
+                Count = x.CategoryID,
+                CategoryName= x.CategoryName
+            });         
+            return Json(values);
         }
     }
 }

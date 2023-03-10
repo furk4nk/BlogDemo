@@ -2,7 +2,7 @@
 {
     public class CategoryChartModel
     {
-        public string MyProperty { get; set; }
+        public int Count { get; set; }
+        public string CategoryName { get; set; }
     }
 }
-//chartta gösterilecek veriler için bir model oluşturulacak

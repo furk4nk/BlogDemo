@@ -44,10 +44,7 @@ namespace BlogDemo.Controllers
                     WriterMail= model.WriterMail,
                     WriterName= model.WriterName,
                     WriterPassword= model.WriterPassword,
-                    WriterStatus=true,
-                    CityID=1,
-                    CountryID=1,
-                    DisctrictID=1
+                    WriterStatus=true
                 };
                 WriterValitator validations = new WriterValitator();
                 ValidationResult result = validations.Validate(writer);
@@ -108,11 +105,8 @@ namespace BlogDemo.Controllers
                 ValidationResult validation = validations.Validate(writer);
                 if (validation.IsValid)
                 {
-                    writer.CityID=1;
-                    writer.DisctrictID=1;
-                    writer.CountryID=1;
                     writer.WriterStatus=true;
-                    _writerService.TInsert(writer);
+                    _writerService.TUpdate(writer);
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else

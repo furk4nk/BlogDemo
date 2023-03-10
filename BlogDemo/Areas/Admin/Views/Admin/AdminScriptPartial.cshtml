@@ -1,9 +1,13 @@
 ﻿    <!-- Mainly scripts -->
-<script src="~/AdminWeb/js/jquery-3.1.1.min.js"></script>
+
 <script src="~/AdminWeb/js/popper.min.js"></script>
 <script src="~/AdminWeb/js/bootstrap.js"></script>
+<script src="~/AdminWeb/js/plugins/dataTables/datatables.min.js"></script>
+<script src="~/AdminWeb/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 <script src="~/AdminWeb/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="~/AdminWeb/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.27.3/dist/apexcharts.min.js"></script>
 
 <!-- Peity -->
 <script src="~/AdminWeb/js/plugins/peity/jquery.peity.min.js"></script>
@@ -33,6 +37,11 @@
 <script src="~/AdminWeb/js/plugins/flot/jquery.flot.js"></script>
 <script src="~/AdminWeb/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
 <script src="~/AdminWeb/js/plugins/flot/jquery.flot.resize.js"></script>
+
+<!-- Custom -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"></script>
+
 <script>
     $(document).ready(function () {
         var d1 = [[1262304000000, 6], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
@@ -188,44 +197,43 @@
     });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"></script>
+
 
 <script type="text/javascript">
-	// sweetalert delete
-	$('.btnsil').on('click', function (e) {
-		e.preventDefault();
-		var url = $(this).attr('href');
-		Swal.fire({
-			title: 'Silmek İstediğinizden Emin Misiniz?',
-			text: "Bu işlem geri alınamaz!",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#d33',
-			cancelButtonColor: '#3085d6',
-			confirmButtonText: 'Evet,Sil!',
-			cancelButtonText: 'Vazgeç'
-		}).then((result) => {
-			if (result.value) {
-				$.ajax({
-					url: url,
-					type: 'POST',
-					success: function (result) {
-						if (result) {
-							console.log(result);
-							Swal.fire(
-								'Silindi!',
-								'Başarılı!.',
-								'success'
-							).then(() => {
-								location.reload();
-							});
-						}
-					}
-				});
-			}
-		});
-	});
+     //sweetalert delete
+    $('.btnsil').on('click', function (event) {
+        event.preventDefault();
+        var url = $(this).attr('href');
+        Swal.fire({
+            title: 'Silmek İstediğinizden Emin Misiniz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Evet,Sil!',
+            cancelButtonText: 'Vazgeç'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result) {
+                            console.log(result);
+                            Swal.fire(
+                                'Silindi!',
+                                'Başarılı!.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 <script>

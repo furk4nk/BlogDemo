@@ -1,5 +1,6 @@
 ﻿using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace DataAccessLayer.Concrete
         {
             optionsBuilder.UseSqlServer("server=FN-515AN_FURKAN;database=DbBlog;Integrated Security=True;");
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Message2>()
@@ -37,9 +37,6 @@ namespace DataAccessLayer.Concrete
         public DbSet<Comment> comments { get; set; }
         public DbSet<Contact> contacts { get; set; }
         public DbSet<Writer> writers { get; set; }
-        public DbSet<Country> countries { get; set; }
-        public DbSet<City> cities { get; set; }
-        public DbSet<District> districts { get; set; }
         public DbSet<NewsLetter> newsLetters { get; set; }
         public DbSet<BlogRayting> blogRaytings { get; set; }
         public DbSet<Notification> notifications { get; set; }

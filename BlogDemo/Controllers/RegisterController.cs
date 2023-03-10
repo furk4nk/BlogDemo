@@ -18,8 +18,6 @@ namespace BlogDemo.Controllers
 	[AllowAnonymous]
 	public class RegisterController : Controller
 	{
-		CountryManager country = new CountryManager(new EfCountryDal());
-		CityManager cm = new CityManager(new EfCityDal());
 		private readonly IWriterService _writerService;
 
 		public RegisterController(IWriterService writerService)
@@ -30,8 +28,6 @@ namespace BlogDemo.Controllers
 		[HttpGet]
 		public IActionResult Index()
 		{			
-			ViewBag.v1 = CountryList();
-			ViewBag.v2 = CityList(1);
 			return View();
 		}
 
@@ -43,8 +39,6 @@ namespace BlogDemo.Controllers
 				WriterName = model.WriterName,
 				WriterMail = model.WriterMail,
 				WriterPassword = model.WriterPassword,
-				CountryID = model.CountryID,
-				CityID = model.CityID,
 				WriterStatus = true
             };
 			WriterValitator validations = new WriterValitator();
@@ -61,33 +55,8 @@ namespace BlogDemo.Controllers
 					ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
 				}
 			}
-			ViewBag.v1 = CountryList();
-			ViewBag.v2 = CityList(1);
 			return View();
 		}
-		private List<SelectListItem> CountryList()
-		{
-			List<SelectListItem> liste = (from x in country.TGetList()
-										  orderby x.CountryName ascending
-										  select new SelectListItem
-										  {
-											  Text = x.CountryName,
-											  Value = x.CountryID.ToString()
-										  }).ToList();
-			return liste;
-		}
-		private List<SelectListItem> CityList(int id)
-		{
-			List<SelectListItem> liste = (from x in cm.TGetList(x=>x.CountryID==id)
-										   orderby x.CityName ascending
-										   select new SelectListItem
-										   {
-											   Text = x.CityName,
-											   Value = x.CityID.ToString()
-										   }).ToList();
-			return liste;
-		}
-
 	}
 }
 #region

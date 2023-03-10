@@ -4,14 +4,16 @@ using DataAccessLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230309083511_mig_remove_Table_city_district_Country")]
+    partial class mig_remove_Table_city_district_Country
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,6 +166,26 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("categories");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.City", b =>
+                {
+                    b.Property<int>("CityID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountryID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CityID");
+
+                    b.HasIndex("CountryID");
+
+                    b.ToTable("City");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
                 {
                     b.Property<int>("CommentID")
@@ -230,6 +252,41 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("ContactID");
 
                     b.ToTable("contacts");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Country", b =>
+                {
+                    b.Property<int>("CountryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CountryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CountryID");
+
+                    b.ToTable("Country");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.District", b =>
+                {
+                    b.Property<int>("DistrictID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisctrictName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DistrictID");
+
+                    b.HasIndex("CityID");
+
+                    b.ToTable("District");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Message", b =>
@@ -351,6 +408,15 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisctrictID")
+                        .HasColumnType("int");
+
                     b.Property<string>("WriterAbout")
                         .HasColumnType("nvarchar(max)");
 
@@ -369,7 +435,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("WriterStatus")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("districtsDistrictID")
+                        .HasColumnType("int");
+
                     b.HasKey("WriterID");
+
+                    b.HasIndex("CityID");
+
+                    b.HasIndex("CountryID");
+
+                    b.HasIndex("districtsDistrictID");
 
                     b.ToTable("writers");
                 });
@@ -393,6 +468,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("writer");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.City", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Country", "country")
+                        .WithMany()
+                        .HasForeignKey("CountryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("country");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.Blog", "blog")
@@ -402,6 +488,17 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("blog");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.District", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.City", "city")
+                        .WithMany()
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("city");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Message2", b =>
@@ -417,6 +514,31 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("ReceiverUser");
 
                     b.Navigation("SenderUser");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Writer", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.City", "city")
+                        .WithMany()
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concrete.Country", "country")
+                        .WithMany()
+                        .HasForeignKey("CountryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concrete.District", "districts")
+                        .WithMany()
+                        .HasForeignKey("districtsDistrictID");
+
+                    b.Navigation("city");
+
+                    b.Navigation("country");
+
+                    b.Navigation("districts");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Blog", b =>
