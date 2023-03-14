@@ -1,0 +1,52 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@model IPagedList<BlogDemo.Areas.ApiDemo.Models.ApiViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-9">
+        <h2>Blog Listesi</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Admin</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Api Bloglar</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="ibox-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Blog Adı</th>
+                <th>Blog Kategori</th>
+                <th>Blog tarihi</th>
+                <th>Düzenle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.BlogName</td>
+                    <td>@(((DateTime)item.date).ToString("dd MMM yyyy"))</td>
+                    <td><a href="/ApiDemo/BlogApi/BlogDelete/@item.ID" class="btn btn-danger btnsil">Sil</a></td>
+                    <td><a href="/ApiDemo/BlogApi/BlogUpdate/@item.ID" class="btn btn-info">Düzenle</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/ApiDemo/BlogApi/BlogInsert" class="btn btn-success">Blog Ekle</a>
+</div>
+<br />
+<div class="col-lg-6 d-flex justify-content-start">
+    @Html.PagedListPager((IPagedList)Model,page => Url.Action("Index","BlogApi",new { page}))
+</div>

@@ -1,0 +1,39 @@
+﻿@using EntityLayer.Concrete
+@model List<Message2>
+@{
+    ViewData["Title"] = "SendBox";
+    Layout = "~/Areas/WriterPanel/Views/Shared/_WriterLayout.cshtml";
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Giden Mesaj Listesi</h4> <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Konu</th>
+                        <th>Alıcı</th>
+                        <th>Tarih</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ID</td>
+                            <td>@item.Subject</td>
+                            <td>@item.ReceiverUser.WriterName</td>
+                            <td>@(((DateTime)item.MessageDate).ToString("dd MMM yyyy"))</td>
+                            <td><a href="/WriterPanel/Message/SendBoxDetails/@item.ID" class="btn btn-inverse-primary">Mesajı Gör</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a href="/WriterPanel/Message/SendMessage" class="btn btn-outline-primary">Yeni Mesaj ekle</a>
+        </div>
+    </div>
+</div>
+

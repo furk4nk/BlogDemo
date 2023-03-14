@@ -43,7 +43,7 @@ namespace DataAccessLayer.EntityFramework
         /// Gelen Yazar için Password properties i Hash Algoritmasına girerek İşlem yapılır
         /// </summary>
         /// <param name="writer">Entity</param>
-        public virtual void Update(Writer writer)
+        public override void Update(Writer writer)
         {
             if (writer!=null)
             {

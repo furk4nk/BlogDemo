@@ -1,46 +1,44 @@
-﻿@model EntityLayer.Concrete.Category
+﻿@model BlogDemo.Areas.ApiDemo.Models.ApiViewModel
 @{
-    ViewData["Title"] = "CategoryAdd";
+    ViewData["Title"] = "BlogInsert";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-9">
-        <h2>Kategori Ekle</h2>
+        <h2>Api Blog Ekle</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="#">Admin</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/Admin/Category/Index">Kategoriler</a>
+                <a href="/ApiDemo/BlogApi/Index">Api Bloglar</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Kategori Ekle</strong>
+                <strong>Blog Ekle</strong>
             </li>
         </ol>
-    </div>
-    <div class="col-lg-2">
     </div>
 </div>
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12 ">
-            <h3 class="m-t-none m-b">Kategori Ekle</h3>
             <form role="form" method="post">
                 <div class="form-group">
-                    <label>Kategori Adı</label>
-                    <span class="text-danger" asp-validation-for="CategoryName"></span>
-                    <input type="text" name="CategoryName" class="form-control">
+                    <label>Blog Adı</label>
+                    <span class="text-danger" asp-validation-for="BlogName"></span>
+                    <input type="text" name="BlogName" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Kategori Açıklama</label>
-                    <span class="text-danger" asp-validation-for="CategoryDescription"></span>
-                    <textarea class="form-control" cols="10" rows="10" name="CategoryDescription"></textarea>
+                    <label>Blog Açıklama</label>
+                    <span class="text-danger" asp-validation-for="BlogDescription"></span>
+                    <textarea class="form-control" cols="10" rows="10" name="BlogDescription"></textarea>
                 </div>
                 <div>
-                    <a href="/WriterPanel/Admin/Category/Index" class="btn btn-white">Vazgeç</a>
+                    <a href="/ApiDemo/BlogApi/Index" class="btn btn-white">Vazgeç</a>
                     <button class="btn btn-primary" type="submit"><strong>Ekle</strong></button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+

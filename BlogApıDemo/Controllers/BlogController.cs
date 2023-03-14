@@ -39,7 +39,7 @@ namespace BlogApıDemo.Controllers
             if (result is null) return StatusCode(statusCode: StatusCodes.Status404NotFound);
             return StatusCode(statusCode:StatusCodes.Status200OK,result);
         }
-        [HttpPost("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteBlog(Guid id)
         {
             Context context = new Context();
