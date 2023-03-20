@@ -14,8 +14,6 @@ namespace BusinessLayer.Concrete
     {
         private readonly IBlogDal _blogDal;
 
-        public int? TBlogCount => _blogDal.BlogCount;
-
         public BlogManager(IBlogDal blogDal)
         {
             _blogDal = blogDal;

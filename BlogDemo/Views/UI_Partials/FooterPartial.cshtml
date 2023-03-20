@@ -1,96 +1,72 @@
 ﻿<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <footer>
-	<div class="container">
-		<div class="row">
-			@await Component.InvokeAsync("_FooterAboutPartial")
+    <div class="container">
+        <div class="row">
+            @await Component.InvokeAsync("_FooterAboutPartial")
 
-			@await Component.InvokeAsync("_FooterPostPartial")
+            @await Component.InvokeAsync("_FooterPostPartial")
 
-			<!-- subscribe -->
-			<div class="col-lg-4 subscribe-main footer-grid-agileits-w3ls text-left">
-				<h2>Abone Olun</h2>
-				<div class="subscribe-main text-left">
-					<div class="subscribe-form">
-							<input class="form-control" type="email" placeholder="Mail Adresiniz..." required="" id="Emaill">
-							<button type="submit" class="btn btn-primary submit" id="btn2">Abone Ol</button>
-							<div class="clearfix"> </div>
-					</div>
-					<p>Gizliliğe Saygı duyuyoruz!</p>
-				</div>
-				<!-- //subscribe -->
-			</div>
-		</div>
-		<!-- footer -->
-		<div class="footer-cpy text-center">
-			<div class="footer-social">
-				<div class="copyrighttop">
-					<ul>
-						<li class="mx-3">
-							<a class="facebook" href="#">
-								<i class="fab fa-facebook-f"></i>
-								<span>Facebook</span>
-							</a>
-						</li>
-						<li>
-							<a class="facebook" href="#">
-								<i class="fab fa-twitter"></i>
-								<span>Twitter</span>
-							</a>
-						</li>
-						<li class="mx-3">
-							<a class="facebook" href="#">
-								<i class="fab fa-google-plus-g"></i>
-								<span>Google+</span>
-							</a>
-						</li>
-						<li>
-							<a class="facebook" href="#">
-								<i class="fab fa-pinterest-p"></i>
-								<span>Pinterest</span>
-							</a>
-						</li>
-					</ul>
+            <!-- subscribe -->
+            <div class="col-lg-4 subscribe-main footer-grid-agileits-w3ls text-left">
+                <h2>Abone Olun</h2>
+                <div class="subscribe-main text-left">
+                    <div class="subscribe-form">
+                        <form name="form1" action="#">
+                            <input class="form-control" type="email" placeholder="Mail Adresiniz..." required="" name="text1" id="Emaill">
+                            <button type="submit" class="btn btn-primary submit" id="btn2">Abone Ol</button>
+                            <div class="clearfix"> </div>
+                        </form>
+                    </div>
+                    <p>Gizliliğe Saygı duyuyoruz!</p>
+                </div>
+                <!-- //subscribe -->
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="footer-cpy text-center">
+            <div class="footer-social">
+                <div class="copyrighttop">
+                    <ul>
+                        <li class="mx-3">
+                            <a class="facebook" href="#">
+                                <i class="fab fa-facebook-f"></i>
+                                <span>Facebook</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="facebook" href="#">
+                                <i class="fab fa-twitter"></i>
+                                <span>Twitter</span>
+                            </a>
+                        </li>
+                        <li class="mx-3">
+                            <a class="facebook" href="#">
+                                <i class="fab fa-google-plus-g"></i>
+                                <span>Google+</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="facebook" href="#">
+                                <i class="fab fa-pinterest-p"></i>
+                                <span>Pinterest</span>
+                            </a>
+                        </li>
+                    </ul>
 
-				</div>
-			</div>
-			<div class="w3layouts-agile-copyrightbottom">
-				<p>
-					© @DateTime.Now.Year YazılımcıSarma. Tüm Hakları Saklıdır | Dizayn Sahibi
-					<a href="http://w3layouts.com/">W3layouts</a>
-				</p>
+                </div>
+            </div>
+            <div class="w3layouts-agile-copyrightbottom">
+                <p>
+                    © @DateTime.Now.Year YazılımcıSarma. Tüm Hakları Saklıdır | Dizayn Sahibi
+                    <a href="http://w3layouts.com/">W3layouts</a>
+                </p>
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<!-- //footer -->
+        <!-- //footer -->
 
 
-	</div>
+    </div>
 </footer>
-<script type="text/javascript">
-	$(document).ready(function () {
-		$("#btn2").click(function () {
-			var mail = document.getElementById("Emaill");
-			var newsLetter = {
-				MailID: 0,
-				Mail: mail.value,
-				MailStatus: true
-			};
-			$.ajax({
-				url: "@Url.Action("SubscribeMail", "NewsLetter")",
-				type: "POST",
-				data: newsLetter,
-				datatype: "json",
-				success: function (data) {
-					swal("kayıt Başarılı", "Abone Olundu", "success");
-					mail.value = "";
-				},
-				error: function () {
-					swal("kayıt başarısız", "Abone olunmadı", "error");
-					mail.value = "";
-				}
-			});
-		});
-	});
-</script>

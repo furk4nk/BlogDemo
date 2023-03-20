@@ -4,38 +4,97 @@
 <!--/ start-smoth-scrolling -->
 <script src="~/web/js/move-top.js"></script>
 <script src="~/web/js/easing.js"></script>
+<script src="~/AdminWeb/js/popper.min.js"></script>
 <script>
-	jQuery(document).ready(function ($) {
-		$(".scroll").click(function (event) {
-			event.preventDefault();
-			$('html,body').animate({
-				scrollTop: $(this.hash).offset().top
-			}, 900);
-		});
-	});
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 900);
+        });
+    });
 </script>
 <!--// end-smoth-scrolling -->
 
 <script>
-	$(document).ready(function () {
-		
-								//var defaults = {
-								//		containerID: 'toTop', // fading element id
-								//	containerHoverID: 'toTopHover', // fading element hover id
-								//	scrollSpeed: 1200,
-								//	easingType: 'linear'
-								//	};
-								
+    $(document).ready(function () {
 
-		$().UItoTop({
-			easingType: 'easeOutQuart'
-		});
+        //var defaults = {
+        //		containerID: 'toTop', // fading element id
+        //	containerHoverID: 'toTopHover', // fading element hover id
+        //	scrollSpeed: 1200,
+        //	easingType: 'linear'
+        //	};
 
-	});
+
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+
+    });
 </script>
 <a href="#home" class="scroll" id="toTop" style="display: block;">
-	<span id="toTopHover" style="opacity: 1;"> </span>
+    <span id="toTopHover" style="opacity: 1;"> </span>
 </a>
 
 <!-- //Custom-JavaScript-File-Links -->
 <script src="~/web/js/bootstrap.js"></script>
+
+
+<!--subscribe Mail ve Footer Alanındaki Abone ol İnputları için Email Validasyonları-->
+<script src="~/web/js/custom.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btn2").click(function (e) {
+            console.log(e);
+            subscribeCtrl(e,'Emaill');
+        });
+        $("#btn1").click(function (e) {
+            subscribeCtrl(e,'Email');
+        });
+    });
+    function subscribeCtrl(e,mailID) {
+        e.preventDefault();
+        var mail = document.getElementById(mailID);
+        var mailCtrl = ValidateEmail(mail.value);
+        if (mailCtrl) {
+            var newsLetter = {
+                Mail: mail.value,
+                MailStatus: true
+            };
+            $.ajax({
+                url: "@Url.Action("SubscribeMail", "NewsLetter")",
+                type: "POST",
+                data: newsLetter,
+                datatype: "json",
+                success: function (data) {
+                    swal({
+                        title:"kayıt Başarılı",
+                        text:"Abone Olundu",
+                        icon:"success"
+                        button:"Tamam"
+                    });
+                },
+                error: function () {
+                    swal("kayıt başarısız", "Abone olunmadı", "error");
+                },
+                complete:function(){
+                    mail.value = "";
+                }                                        
+            });
+        }
+        else {
+            swal({
+                title: "Email Hatalı",
+                text: "Lütfen Geçerli bir Mail Adresi Giriniz",
+                icon: "warning",
+                button: "Tamam"
+            });
+        }
+    }
+</script>
+<!-- // subscribe Mail ve Footer Alanındaki Abone ol İnputları için Email Validasyonları-->

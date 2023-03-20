@@ -12,7 +12,6 @@ namespace DataAccessLayer.Abstract
 		List<Blog> GetBlogInListAll();
 		List<Blog> GetLastBlogs(int count);
 		List<Blog> GetLastBlogsWithCategoryAndWriter(int count);
-		int? BlogCount { get; }
 		int WriterBlogCount(int id);
 		List<Blog> GetRecentBlogListByWriter(int id,int count);
 		List<Blog> GetBlogListByTrue();

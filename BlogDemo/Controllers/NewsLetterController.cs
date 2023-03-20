@@ -1,9 +1,11 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogDemo.Controllers
 {
+	[AllowAnonymous]
 	public class NewsLetterController : Controller
 	{
 		private readonly INewsLetterService _newsLetterService;
@@ -19,8 +21,7 @@ namespace BlogDemo.Controllers
 		}
 		[HttpPost]
 		public PartialViewResult SubscribeMail(NewsLetter newsLetter)
-		{
-			newsLetter.MailStatus = true;
+		{			
 			_newsLetterService.TInsert(newsLetter);
 			return PartialView();
 		}

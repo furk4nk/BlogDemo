@@ -10,37 +10,33 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.EntityFramework
 {
-    public class EfAdminDal : GenericRepository<Admin> , IAdminDal
+    public class EfAdminDal : GenericRepository<Admin>, IAdminDal
     {
-        public override void Insert(Admin t)
+        public EfAdminDal(Context c) : base(c)
         {
+        }
+
+        public override bool Insert(Admin t)
+        {
+            int ctrl = 0;
             if (t != null)
             {
-               var result = BCrypt.Net.BCrypt.HashPassword(t.Password);
-                using (Context c = new Context())
-                {
-                    t.Password = result;
-                    c.Set<Admin>().Add(t);
-                    c.SaveChanges();
-                }
-
+                var result = BCrypt.Net.BCrypt.HashPassword(t.Password);
+                t.Password = result;
+                return Insert<Admin>(t);
             }
-            else
-            {
-                throw new Exception("Entity Boş olamaz -Admin");
-            }
+            return CtrlValue(ctrl);
         }
-        public override void Update(Admin t)
+        public override bool Update(Admin t)
         {
+            int ctrl = 0;
             if (t != null)
             {
                 t.Password = BCrypt.Net.BCrypt.HashPassword(t.Password);
-                using (Context c = new Context())
-                {
-                    c.Set<Admin>().Update(t);
-                    c.SaveChanges();
-                }
+                _context.Set<Admin>().Update(t);
+                ctrl = _context.SaveChanges();
             }
+            return CtrlValue(ctrl);
         }
     }
 }

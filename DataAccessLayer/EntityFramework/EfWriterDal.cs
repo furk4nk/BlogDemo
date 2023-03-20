@@ -13,47 +13,47 @@ namespace DataAccessLayer.EntityFramework
 {
     public class EfWriterDal : GenericRepository<Writer>, IWriterDal
     {
-        /// <summary>
-        /// Gelen Writer İçin Password Proporties ini hash algoritması uygulayan function
-        /// </summary>
-        /// <param name="writer">Entity</param>
-        public override void Insert(Writer writer)
+        //private readonly Context _context;
+        public EfWriterDal(Context c) : base(c)
         {
-            if (writer !=null )
-            {
-                writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(writer.WriterPassword);
-                using (Context c = new Context())
-                {
-                    c.Add(writer);
-                    c.SaveChanges();
-                };
-            }
-
+            //this._context=c;
         }
+
+        ///// <summary>
+        ///// Gelen Writer İçin Password Proporties ini hash algoritması uygulayan function
+        ///// </summary>
+        ///// <param name="writer">Entity</param>
+        //public override bool Insert(Writer writer)
+        //{
+        //    int ctrl = 0;
+        //    if (writer !=null)
+        //    {
+        //        writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(writer.WriterPassword);
+        //        _context.Add(writer);
+        //        _context.SaveChanges();
+        //    }
+        //    return CtrlValue(ctrl);
+        //}
 
         public bool IsWriterControl(string mail)
         {
-            using (Context c = new Context())
-            {
-                return c.writers.Select(x => x.WriterMail).Contains(mail);
-            }
+            return _context.writers.Select(x => x.WriterMail).Contains(mail);
         }
 
-        /// <summary>
-        /// Gelen Yazar için Password properties i Hash Algoritmasına girerek İşlem yapılır
-        /// </summary>
-        /// <param name="writer">Entity</param>
-        public override void Update(Writer writer)
-        {
-            if (writer!=null)
-            {
-                writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(writer.WriterPassword);
-                using (Context c = new Context())
-                {
-                    c.Add(writer);
-                    c.SaveChanges(true);
-                }
-            }
-        }
+        ///// <summary>
+        ///// Gelen Yazar için Password properties i Hash Algoritmasına girerek İşlem yapılır
+        ///// </summary>
+        ///// <param name="writer">Entity</param>
+        //public override bool Update(Writer writer)
+        //{
+        //    int ctrl=0;
+        //    if (writer!=null)
+        //    {
+        //        writer.WriterPassword = BCrypt.Net.BCrypt.HashPassword(writer.WriterPassword);
+        //        _context.Add(writer);
+        //        ctrl =_context.SaveChanges();                
+        //    }
+        //    return CtrlValue(ctrl);
+        //}
     }
 }

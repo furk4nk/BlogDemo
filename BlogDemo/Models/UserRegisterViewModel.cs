@@ -7,17 +7,20 @@ namespace BlogDemo.Models
 {
 	public class UserRegisterViewModel
 	{
-		public string WriterName { get; set; }
-		public string WriterMail { get; set; }
-		[Required(ErrorMessage = "Lütfen Şifre Belirleyiniz")]
-		public string WriterPassword { get; set; }
+		[Required(ErrorMessage ="İsminizi Giriniz")]
+		public string NameSurname { get; set; }
+        [Required(ErrorMessage = "Mail Adresi Giriniz")]
+        public string Email { get; set; }
+		[Required(ErrorMessage = "Şifre Belirleyiniz")]
+		public string Password { get; set; }
 
 		[Required(ErrorMessage = "Şifrenizi Tekrar Giriniz")]
-		[Compare("WriterPassword", ErrorMessage = "Şifrelerin Eşleştiğinden Emin Olunuz")]
+		[Compare("Password", ErrorMessage = "Şifrelerin Eşleştiğinden Emin Olunuz")]
 		public string ConfirmPassword { get; set; }
-		[Required(ErrorMessage ="ülke seçiniz lütfen")]
-		public int CountryID { get; set; } 
-		public int CityID { get; set; }
-	}	
+
+        [Required(ErrorMessage = "Kullanıcı Adınızı Giriniz")]
+        public string UserName { get; set; }
+        public bool Accept { get; set; }
+    }	
 }
 	

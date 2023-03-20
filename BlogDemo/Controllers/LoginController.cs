@@ -1,16 +1,9 @@
 ﻿using BlogDemo.Models;
 using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
@@ -19,9 +12,11 @@ namespace BlogDemo.Controllers
     public class LoginController : Controller
     {
         private readonly IWriterService _writerService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public LoginController(IWriterService writerService)
+        public LoginController(IWriterService writerService , SignInManager<AppUser> signInManager)
         {
+            this._signInManager=signInManager;
             _writerService = writerService;
         }
 
@@ -39,31 +34,21 @@ namespace BlogDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var uservalues = _writerService.TGetList(x => x.WriterMail == model.Email).FirstOrDefault();
-                if (uservalues !=null)
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, true);
+                if (result.Succeeded)
                 {
-                    var result = BCrypt.Net.BCrypt.Verify(model.Password, uservalues.WriterPassword);
-                    if (result == true)
-                    {
-                        List<Claim> claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name,uservalues.WriterName),
-                            new Claim(ClaimTypes.NameIdentifier,uservalues.WriterID.ToString()),
-                            new Claim(ClaimTypes.Email,model.Email)
-                        };
-                        ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "a ");
-                        ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-                        await HttpContext.SignInAsync(principal);
-                        return RedirectToAction("Index", "Dashboard", new { area = "WriterPanel" });         // parametre gönderemedik goto
-                    }
+                    return RedirectToAction("Index","Dashboard",new {area="WriterPanel"});
                 }
-                ModelState.AddModelError("", "Email veya şifre hatalı");
+                else
+                {
+                    ModelState.AddModelError("","Kullanıcı Adı veya Şifre Hatalı");
+                }
             }
             return View();
         }
         public async Task<IActionResult> LogOut()
         {
-            await HttpContext.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Login");
         }
     }

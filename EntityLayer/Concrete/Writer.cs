@@ -27,6 +27,6 @@ namespace EntityLayer.Concrete
         public virtual ICollection<Message2> WriterReceiver { get; set; }
 
         public List<Blog> Blogs { get; set; }
-
+        public int appUserID { get; set; }
 	}
 }

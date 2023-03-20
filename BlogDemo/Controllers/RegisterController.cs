@@ -1,75 +1,76 @@
 ﻿using BlogDemo.Models;
 using BusinessLayer.Abstract;
-using BusinessLayer.Concrete;
+using BusinessLayer.ActionFilters;
 using BusinessLayer.FluentValidation;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlogDemo.Controllers
 {
-	[AllowAnonymous]
-	public class RegisterController : Controller
-	{
-		private readonly IWriterService _writerService;
-
-		public RegisterController(IWriterService writerService)
-		{
-			_writerService = writerService;
-		}
-
-		[HttpGet]
-		public IActionResult Index()
-		{			
-			return View();
-		}
-
-		[HttpPost]
-		public IActionResult Index(UserRegisterViewModel model)
-		{
-			Writer writer = new Writer()
-			{
-				WriterName = model.WriterName,
-				WriterMail = model.WriterMail,
-				WriterPassword = model.WriterPassword,
-				WriterStatus = true
-            };
-			WriterValitator validations = new WriterValitator();
-			ValidationResult result = validations.Validate(writer);
-			if (result.IsValid)
-			{
-				_writerService.TInsert(writer);
-				return RedirectToAction("Index", "Blog");
-			}
-			else
-			{
-				foreach (var item in result.Errors)
-				{
-					ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-				}
-			}
-			return View();
-		}
-	}
+    [AllowAnonymous]
+    public class RegisterController : Controller
+    {
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IWriterService _writerService;
+        public RegisterController(UserManager<AppUser> userManager, IWriterService writerService)
+        {
+            this._userManager = userManager;
+            this._writerService=writerService;
+        }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(UserRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = new AppUser()
+                {
+                    NameSurname = model.NameSurname.Trim(),
+                    NormalizedNameSurname= model.NameSurname.Trim().ToUpper(),
+                    Email = model.Email.Trim(),
+                    UserName=model.UserName.Trim()
+                };
+                UserValidator validations = new UserValidator();
+                ValidationResult result = validations.Validate(user);
+                if (result.IsValid)
+                {
+                    if (model.Accept)
+                    {
+                        IdentityResult ıdentityResult = await _userManager.CreateAsync(user, model.Password);
+                        if (ıdentityResult.Succeeded)
+                        {
+                            return RedirectToAction("Index", "Login");
+                        }
+                        else
+                        {
+                            foreach (var item in ıdentityResult.Errors)
+                            {
+                                ModelState.AddModelError("", errorMessage: item.Description);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Accept", "Lütfen Kullanım Şartlarını Kabul ediniz");
+                    }
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                    }
+                }
+            }
+            return View(model);
+        }
+    }
 }
-#region
-
-// şehirler tabloları business ktamamnına eklenecek 
-// register sayfası düzenlenecek
-// readmore sayfasında son post gösterilecek 
-//şehirler listelenecek
-//goto 
-// geri kalan kısmı unuttum
-//GOTO 
-// BYRCİPT EKLENECEK ŞİFRE KONTROLÜ (yapıldı)
-//VALİDASYON İÇİN MODEL ORTADAN KALDIRILIP WRİTER İLE ÇALIŞMA BAĞIMLILIĞINI ORTADAN KALDIRMAMIZ GEREKİYOR (yapıldı)
-//login ekranı düzenlenecek
-
-#endregion

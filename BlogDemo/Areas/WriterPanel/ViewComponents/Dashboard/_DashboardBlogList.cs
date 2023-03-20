@@ -1,5 +1,8 @@
 ﻿using BusinessLayer.Abstract;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlogDemo.Areas.WriterPanel.ViewComponents.Dashboard
 {
@@ -14,8 +17,8 @@ namespace BlogDemo.Areas.WriterPanel.ViewComponents.Dashboard
 
         public IViewComponentResult Invoke()
         {
-            var result = _blogService.TGetLastBlogsWithCategoryAndWriter(6);
-            return View(result);
+            List<Blog> blogs = _blogService.TGetLastBlogsWithCategoryAndWriter(6);
+            return View(blogs);
         }
     }
 }

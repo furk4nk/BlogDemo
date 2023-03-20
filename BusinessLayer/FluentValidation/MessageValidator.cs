@@ -1,33 +1,23 @@
-﻿using DataAccessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.FluentValidation
 {
     public class MessageValidator : AbstractValidator<Message2>
     {
-        public MessageValidator()
+        public MessageValidator(IMessage2Service message2Service)   
         {
             // Rules ReceiverUser.WriterName
             RuleFor(x => x.ReceiverUser.WriterMail).Custom((mail, context) =>
             {
-                using (Context c = new Context())
-                {
-                    var result = c.Set<Message2>().Where(x => x.ReceiverUser.WriterMail==mail).FirstOrDefault();
+                    var result = message2Service.TGetList(x => x.ReceiverUser.WriterMail==mail).FirstOrDefault();
                     if (result == null)
                     {
-                        context.AddFailure("ReceiverUser.WriterMail","Yazar Epostası sistemde kayıtlı değil Lütfen sisteme Kayıtlı olan yazar epostasını giriniz");
-                    }
-                }
+                        context.AddFailure("ReceiverUser.WriterMail", "Yazar Epostası sistemde kayıtlı değil Lütfen sisteme Kayıtlı olan yazar epostasını giriniz");
+                    }                
             });
-
-
 
             // Rules Subject 
             RuleFor(x => x.Subject).NotEmpty().WithMessage("Konu Başlığı Giriniz")

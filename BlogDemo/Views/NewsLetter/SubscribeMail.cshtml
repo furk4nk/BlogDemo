@@ -9,25 +9,3 @@
 		<input type="email" placeholder="Email" required="" name="Mail" id="Email">
 		<input type="submit" value="Abone ol" id="btn1">
 </div>
-<script>
-	$(document).ready(function () {
-		$("#btn1").click(function () {
-			var mail = document.getElementById("Email");
-			var newsLetter = {
-				MailID: 0,
-				Mail:mail.value,
-				MailStatus:true
-			};
-			$.ajax({
-				url: "@Url.Action("SubscribeMail", "NewsLetter")",
-				type: "POST",
-				data: newsLetter,
-				datatype: "json",
-				success: function (data) {
-					swal("kayıt Başarılı","Abone Olundu","success");
-					mail.value="";
-				}
-			});
-		});
-	});
-</script>

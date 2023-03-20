@@ -29,7 +29,15 @@ namespace BlogDemo.Controllers
         //Blog Detaylarının Listelenmesi
         public IActionResult BlogReadMore(int id=1)
         {
-            var values = _blogService.TGetById(id);
+			if (User.Identity.Name is not null)
+			{
+				ViewBag.commentStatus=true;
+			}
+			else
+			{
+				ViewBag.commentStatus=false;
+			}
+			var values = _blogService.TGetById(id);
             ViewBag.id = id;
             if (values!=null)
                 ViewBag.writerid=values.WriterID;

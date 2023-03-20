@@ -28,6 +28,11 @@ namespace BusinessLayer.FluentValidation
 			RuleFor(x => x.BlogContext).NotEmpty().WithMessage("Blog İçeriği Boş Geçilemez")
 				.MinimumLength(135).WithMessage("Blog İçeriği En Az 135 Karakter Olmalıdır")
 				.MaximumLength(5000).WithMessage("Blog İçeriği En Fazla 5000 Karakter Olmalıdır");
+
+
+
+			// Blog Image Rules
+			RuleFor(x => x.BlogImage).NotEmpty().WithMessage("Blog Resmi Boş Geçilemez");
 				
 			
 		}

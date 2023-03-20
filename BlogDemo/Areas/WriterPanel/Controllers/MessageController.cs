@@ -1,9 +1,10 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
-using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
 
 namespace BlogDemo.Areas.WriterPanel.Controllers
@@ -12,16 +13,17 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
     public class MessageController : Controller
     {
         private readonly IMessage2Service _message2Service;
-        private int _authorUserID => AuthorUser();
-        public MessageController(IMessage2Service message2Service)
+        private readonly IWriterService _writerService;
+        private Writer _authorUser => AuthorUser();
+        public MessageController(IMessage2Service message2Service, IWriterService writerService)
         {
+            _writerService = writerService;
             _message2Service=message2Service;
         }
 
         public IActionResult InBox()
         {
-
-            var values = _message2Service.TGetListMessagesByWriter(_authorUserID);
+            var values = _message2Service.TGetListMessagesByWriter(_authorUser.WriterID);
             return View(values);
         }
         public IActionResult MessageDetails(int id)
@@ -32,7 +34,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         [HttpGet]
         public IActionResult SendBox()
         {
-            var values = _message2Service.TGetListSendMessagesByWriter(_authorUserID);
+            var values = _message2Service.TGetListSendMessagesByWriter(_authorUser.WriterID);
             return View(values);
         }
         public IActionResult SendBoxDetails(int id)
@@ -46,15 +48,15 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult SendMessage(Message2 message)
+        public IActionResult SendMessage(Message2 message) // receiver id alakasız değerlerde geliyor data access gtby ıd metodunda bir sorun var sanırım
         {
-            MessageValidator validations = new MessageValidator();
+            MessageValidator validations = new MessageValidator(_message2Service);
             ValidationResult result = validations.Validate(message);
             if (result.IsValid)
             {
                 message.MessageDate=System.DateTime.Now;
                 message.MessageStatus=true;
-                message.SenderID = _authorUserID;
+                message.SenderID = _authorUser.WriterID;
                 message.ReceiverID = _message2Service.TGetID(message.ReceiverUser.WriterMail);
                 message.ReceiverUser=null;
                 _message2Service.TInsert(message);
@@ -69,13 +71,15 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             }
             return View(message);
         }
-        private int AuthorUser()
+        private Writer AuthorUser()
         {
             if (User.Identity.Name!=null)
             {
-                return int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
+                int authorID = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(type: ClaimTypes.NameIdentifier).Value);
+                Writer author = _writerService.TGetList(x => x.appUserID == authorID).FirstOrDefault();
+                return author;
             }
-            return 0;
+            throw new InvalidWriterException(User.Identity.Name);
         }
     }
 }

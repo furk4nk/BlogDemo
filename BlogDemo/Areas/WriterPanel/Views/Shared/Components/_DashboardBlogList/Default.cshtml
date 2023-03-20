@@ -16,6 +16,7 @@
                                 <th> Kategori </th>
                                 <th> Oluşturulma Tarihi </th>
                                 <th> yazar İsmi </th>
+                                <th> Detaylar </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,12 +32,13 @@
                                     </td>
                                     <td> @(((DateTime)item.BlogCreateDate).ToString("dd MMM yyyy")) </td>
                                     <td> @item.writer.WriterName </td>
+                                    <td><a href="/Blog/BlogReadMore/@item.BlogID" class="btn btn-gradient-dark">Detaylar</a></td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </div>s
     </div>
 </div>

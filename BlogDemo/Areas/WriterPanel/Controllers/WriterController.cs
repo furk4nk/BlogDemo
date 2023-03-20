@@ -1,15 +1,16 @@
-﻿using BCrypt.Net;
-using BlogDemo.Areas.WriterPanel.Models;
+﻿using BlogDemo.Areas.WriterPanel.Models;
 using BusinessLayer.Abstract;
+using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BlogDemo.Areas.WriterPanel.Controllers
 {
@@ -17,10 +18,11 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
     public class WriterController : Controller
     {
         private readonly IWriterService _writerService;
-        private Writer _authorUser => AuthorUser();
+        private readonly UserManager<AppUser> _userManager;
 
-        public WriterController(IWriterService writerService)
+        public WriterController(IWriterService writerService, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _writerService = writerService;
         }
         [HttpGet]
@@ -86,38 +88,72 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         }
 
         [HttpGet]
-        public IActionResult UpdateWriter() // veriler kaydedilirken cityId bilgisi eklenmeklidir
+        public async Task<IActionResult> UpdateWriter()
         {
-            Writer values = new Writer();
-            if (User.Identity.Name != null)
+            Writer _authorUser = AuthorUser();
+
+            if (User.Identity.Name == null)
+                return View(null);
+            var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            WriterUpdateViewModel model = new WriterUpdateViewModel()
             {
-                values = _writerService.TGetById(_authorUser.WriterID);
-            }
-            return View(values);
+                ID=aspUser.Id,
+                WriterImage = null,
+                NameSurname = aspUser.NameSurname,
+                UserName = aspUser.UserName,
+                Email =aspUser.Email,
+                WriterAbout = _authorUser.WriterAbout
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult UpdateWriter(Writer writer)
+        public async Task<IActionResult> UpdateWriter(WriterUpdateViewModel model) // Güncellenen Email Değeri sistemde Güncellenmiyor Claimler ile halledilmeli
         {
+            Writer _authorUser = AuthorUser();
+
+            Writer writer = _authorUser;
+            writer.WriterName=model.NameSurname;
+            writer.WriterAbout=model.WriterAbout;
+            writer.WriterMail=model.Email;
+
             if (ModelState.IsValid)
             {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+
                 WriterValitator validations = new WriterValitator();
-                ValidationResult validation = validations.Validate(writer);
-                if (validation.IsValid)
+                ValidationResult result1 = validations.Validate(writer);
+                if (result1.IsValid)
                 {
-                    writer.WriterStatus = true;
-                    _writerService.TUpdate(writer);
-                    return RedirectToAction("Index", "Dashboard");
+                    user.Email=model.Email;
+                    user.NameSurname = model.NameSurname;
+                    user.NormalizedNameSurname=model.NameSurname.Trim().ToUpper();
+                    IdentityResult result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        if (result.Succeeded)
+                        {
+                            _writerService.TUpdate(writer);
+                        }
+                        return Redirect("/WriterPanel/Dashboard");
+                    }
+                    else
+                    {
+                        foreach (var item in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty,item.Description);
+                        }
+                    }
                 }
                 else
                 {
-                    foreach (var item in validation.Errors)
+                    foreach (var item in result1.Errors)
                     {
-                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                        ModelState.AddModelError(string.Empty,errorMessage:item.ErrorMessage);
                     }
                 }
             }
-            return View(writer);
+            return View(model);
         }
 
         [HttpGet]
@@ -126,41 +162,23 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult PasswordChange(WriterPasswordChangeViewModel model)
+        public async Task<IActionResult> PasswordChange(WriterPasswordChangeViewModel model)
         {
-            if (BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
-            {   //validasyon kontrolü yapılması gerekiyor yeni şifre kurallara uygun olması gerekiyor
-                Writer Ctrlwriter = _authorUser;  // kkontrol edeceğimiz yazar değerleri
-                Ctrlwriter.WriterPassword = model.newPassword;
-
-                WriterValitator validations = new WriterValitator();
-                ValidationResult result = validations.Validate(Ctrlwriter);
-                if (result.IsValid)
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var IdentityResult = await _userManager.ChangePasswordAsync(user,model.oldPassword,model.newPassword);
+                if (IdentityResult.Succeeded)
                 {
-
-                    if (!BCrypt.Net.BCrypt.Verify(model.oldPassword, _authorUser.WriterPassword))
-                    {
-                        _authorUser.WriterPassword = model.newPassword;
-                        _writerService.TUpdate(_authorUser);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Yeni Şifreniz Mevcut şifrenizle Aynı olamaz");
-                        return View(model);
-                    }
-                    return RedirectToAction("Index", "Dashboard");
+                    return Redirect("/WriterPanel/Dashboard");
                 }
                 else
                 {
-                    foreach (var item in result.Errors)
+                    foreach (var item in IdentityResult.Errors)
                     {
-                        ModelState.AddModelError("", item.ErrorMessage);
+                        ModelState.AddModelError(string.Empty,item.Description);
                     }
                 }
-            }
-            else  // Şifre yanlış girilirse verilecek uyarı
-            {
-                ModelState.AddModelError("", "Şifreniz yanlış");
             }
             return View();
         }
@@ -168,11 +186,11 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         {
             if (User.Identity.Name != null)
             {
-                int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
-                return _writerService.TGetById(id);
-            }
-            return null;
+                int authorID = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(type: ClaimTypes.NameIdentifier).Value);
+                var values = _writerService.TGetList(x => x.appUserID == authorID).FirstOrDefault();
+                return values;
+            }   
+            throw new InvalidWriterException(User.Identity.Name);
         }
     }
 }
-// author user refactor edilecek 02/03/2023

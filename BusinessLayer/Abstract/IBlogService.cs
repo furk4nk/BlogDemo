@@ -50,11 +50,6 @@ namespace BusinessLayer.Abstract
         List<Blog> TGetLastBlogsWithCategoryAndWriter(int count);
 
         /// <summary>
-        /// Toplam Blog Sayısını Tutar
-        /// </summary>
-        int? TBlogCount { get; }
-
-        /// <summary>
         /// Yazarın blog sayısını Döndürür
         /// </summary>
         /// <param name="id">Yazar ID</param>

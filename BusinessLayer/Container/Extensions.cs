@@ -1,8 +1,10 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.ActionFilters;
 using BusinessLayer.Concrete;
 using BusinessLayer.FluentValidation;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
+using DataAccessLayer.Repositories;
 using EntityLayer.Concrete;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +21,10 @@ namespace BusinessLayer.Container
 	{
 		public static void ContainerDependendies(this IServiceCollection services)
 		{
-			services.AddScoped<IBlogService, BlogManager>();
+            #region Repositories
+            services.AddTransient(typeof(IGenericDal<>), typeof(GenericRepository<>));
+
+            services.AddScoped<IBlogService, BlogManager>();
 			services.AddScoped<IBlogDal, EfBlogDal>();
 
 			services.AddScoped<ICommentService,CommentManager>();
@@ -50,6 +55,13 @@ namespace BusinessLayer.Container
 
 			services.AddScoped<IMessage2Service,Message2Manager>();
 			services.AddScoped<IMessage2Dal,EfMessage2Dal>();
-		}
+            #endregion
+
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(new CustomActionFilterAttribute());
+            });
+			services.AddScoped<CustomActionFilterAttribute>();
+        }
 	}
 }

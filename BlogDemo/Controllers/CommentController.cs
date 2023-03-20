@@ -1,11 +1,12 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogDemo.Controllers
 {
-	public class CommentController : Controller
-	{
+    public class CommentController : Controller
+	{	
 		private readonly ICommentService _commentService;
 
 		public CommentController(ICommentService commentService)
@@ -25,6 +26,5 @@ namespace BlogDemo.Controllers
 			_commentService.TInsert(comment);
 			return PartialView();
 		}
-
 	}
 }

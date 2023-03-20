@@ -1,48 +1,63 @@
 ﻿<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<div class="comment-top">
-	<h4>Yorum Yap</h4>
-	<div class="comment-bottom">
-		<input class="form-control" type="text" name="CommentUserName" placeholder="İsim" required="" id="comment">
-		<input class="form-control" type="email" name="Email" placeholder="Email" required="" id="mail">
+@if (ViewBag.commentStatus is true)
+{
+    <div class="comment-top">
+        <h4>Yorum Yap</h4>
+        <div class="comment-bottom">
+            <input class="form-control" type="text" name="CommentUserName" placeholder="İsim" required="" id="comment">
+            <input class="form-control" type="email" name="Email" placeholder="Email" required="" id="mail">
 
-		<input class="form-control" type="text" name="CommentTitle" placeholder="Konu" required="" id="subject">
+            <input class="form-control" type="text" name="CommentTitle" placeholder="Konu" required="" id="subject">
 
-		<textarea class="form-control" name="CommentContext" placeholder="Mesajınız..." required="" id="commentContext"></textarea>
-		<button type="submit" class="btn btn-primary submit" id="btnComment">Gönder</button>
-	</div>
-</div>
+            <textarea class="form-control" name="CommentContext" placeholder="Mesajınız..." required="" id="commentContext"></textarea>
+            <button type="submit" class="btn btn-primary submit" id="btnComment">Gönder</button>
+        </div>
+    </div>
+}
+else
+{
+     <h6>Yorum Yapmak<a href="/Login/Index">Giriş</a>Yapmalısın</h6>
+}
 <script>
-	$(document).ready(function () {
-		$("#btnComment").click(function () {
-			var commentUserName = document.getElementById("comment");
-			var email = document.getElementById("mail");
-			var commentTitle = document.getElementById("subject");
-			var commentContext = document.getElementById("commentContext");
-			var Comment = {
-				CommentUserName: commentUserName.value,
-				Email: email.value,
-				CommentTitle: commentTitle.value,
-				CommentContext: commentContext.value,
-				BlogID:@ViewBag.id
-			};
-			console.log(Comment);
-			$.ajax({
-				type: "POST",
-				url: "@Url.Action("AddComment","Comment")",
-				datatype: "json",
-				data: Comment,
-				success: function (data) {
-					swal("İşlem Tamam", "yorumunuz alınmıştır", "success");
-					commentContext.value = "";
-					commentTitle.value = "";
-					commentUserName.value;
-					email.value = "";
-				},
-				error: function (response) {
-					swal("işlem başarısız", "hata", "error");
-				}
-			});
-		});
-	});
+    $(document).ready(function () {
+        $("#btnComment").click(function () {
+            var commentUserName = document.getElementById("comment");
+            var email = document.getElementById("mail");
+            var commentTitle = document.getElementById("subject");
+            var commentContext = document.getElementById("commentContext");
+            var Comment = {
+                CommentUserName: commentUserName.value,
+                Email: email.value,
+                CommentTitle: commentTitle.value,
+                CommentContext: commentContext.value,
+                BlogID: @ViewBag.id
+                };
+            console.log(commentUserName);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddComment","Comment")",
+                datatype: "json",
+                data: Comment,
+                success: function (data) {
+                    swal({
+                        title:"İşlem Tamam",
+                        text:"yorumunuz alınmıştır",
+                        icon:"success",
+                        button:"Tamam"
+                    });
+                    commentContext.value = "";
+                    commentTitle.value = "";
+                    commentUserName.value;
+                    email.value = "";
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3500);
+                },
+                error: function (response) {
+                    swal("işlem başarısız", "hata", "error");
+                }
+            });
+        });
+    });
 </script>
