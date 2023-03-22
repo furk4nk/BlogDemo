@@ -19,9 +19,69 @@ namespace BusinessLayer.Concrete
             _commentDal = commentDal;
         }
 
+        public Task<Comment> TGetByIdAsync(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<A> TGetByIdAsync<A>(int ID) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync(Expression<Func<Comment, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Comment>> TGetListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>() where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Comment>> TGetListAsync(Expression<Func<Comment, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync(Comment t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync<A>(A model) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertRangeAsync(List<Comment> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TDelete(Comment t)
         {
             _commentDal.Delete(t);
+        }
+
+        public void TDeleteRange(List<Comment> t)
+        {
+            throw new NotImplementedException();
         }
 
         public Comment TGetById(int ID)
@@ -49,9 +109,19 @@ namespace BusinessLayer.Concrete
             _commentDal.Insert(t);
         }
 
+        public void TInsertRange(List<Comment> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TUpdate(Comment t)
         {
             _commentDal.Update(t);
+        }
+
+        public void TUpdateRange(List<Comment> t)
+        {
+            throw new NotImplementedException();
         }
     }
 }

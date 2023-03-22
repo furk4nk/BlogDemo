@@ -32,7 +32,7 @@ namespace DataAccessLayer.EntityFramework
         [NonAction]
         public List<Blog> GetLastBlogsWithCategoryAndWriter(int count)
         {
-            return _context.Set<Blog>().OrderByDescending(x => x.BlogCreateDate)
+            return _context.Set<Blog>().Where(y => y.BlogStatus == true).OrderByDescending(x => x.BlogCreateDate)
                 .Take(count)
                 .Include(x => x.category)
                 .Include(x => x.writer).ToList();

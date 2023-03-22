@@ -1,5 +1,6 @@
 ﻿using BlogDemo.Models;
 using BusinessLayer.Abstract;
+using BusinessLayer.Abstract.UnitOfWork;
 using BusinessLayer.ActionFilters;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
@@ -15,11 +16,9 @@ namespace BlogDemo.Controllers
     public class RegisterController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IWriterService _writerService;
-        public RegisterController(UserManager<AppUser> userManager, IWriterService writerService)
+        public RegisterController(UserManager<AppUser> userManager)
         {
             this._userManager = userManager;
-            this._writerService=writerService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -31,14 +30,14 @@ namespace BlogDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = new AppUser()
+                AppUser user = new()
                 {
                     NameSurname = model.NameSurname.Trim(),
                     NormalizedNameSurname= model.NameSurname.Trim().ToUpper(),
                     Email = model.Email.Trim(),
                     UserName=model.UserName.Trim()
                 };
-                UserValidator validations = new UserValidator();
+                UserValidator validations = new();
                 ValidationResult result = validations.Validate(user);
                 if (result.IsValid)
                 {
@@ -47,6 +46,8 @@ namespace BlogDemo.Controllers
                         IdentityResult ıdentityResult = await _userManager.CreateAsync(user, model.Password);
                         if (ıdentityResult.Succeeded)
                         {
+                            user = await _userManager.FindByNameAsync(user.UserName);
+                            await _userManager.AddToRoleAsync(user, "Kullanici");
                             return RedirectToAction("Index", "Login");
                         }
                         else

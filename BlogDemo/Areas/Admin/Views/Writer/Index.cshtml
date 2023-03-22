@@ -85,7 +85,7 @@
             url: '/Admin/Writer/GetWriterList',
             success: function (func) {
                 CreateWriterTable(func);
-                /*$('#writerTable').DataTable();*/  // bu satır olmayınca tablo çalışmıyor nedenini bulamadım!!
+                $('#writerTable').DataTable();   /*bu satır olmayınca tablo çalışmıyor nedenini bulamadım!!*/
             }
         });
     });

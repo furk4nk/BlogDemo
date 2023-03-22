@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
+using DataAccessLayer.UnitOfWork;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace BusinessLayer.Concrete
     public class BlogManager : IBlogService
     {
         private readonly IBlogDal _blogDal;
-
         public BlogManager(IBlogDal blogDal)
         {
             _blogDal = blogDal;
@@ -91,6 +91,76 @@ namespace BusinessLayer.Concrete
         public int TGetCount(Expression<Func<Blog, bool>> filter = null )
         {
             return _blogDal.GetCount(filter);
+        }
+
+        public void TDeleteRange(List<Blog> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TInsertRange(List<Blog> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TUpdateRange(List<Blog> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Blog>> TGetListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>() where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Blog>> TGetListAsync(Expression<Func<Blog, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync(Blog t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertRangeAsync(List<Blog> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync<A>(A model) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Blog> TGetByIdAsync(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<A> TGetByIdAsync<A>(int ID) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync(Expression<Func<Blog, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
         }
     }
 }

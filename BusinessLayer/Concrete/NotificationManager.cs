@@ -19,7 +19,67 @@ namespace BusinessLayer.Concrete
             _notificationDal=notificationDal;
         }
 
+        public Task<Notification> TGetByIdAsync(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<A> TGetByIdAsync<A>(int ID) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync(Expression<Func<Notification, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Notification>> TGetListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>() where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Notification>> TGetListAsync(Expression<Func<Notification, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync(Notification t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync<A>(A model) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertRangeAsync(List<Notification> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TDelete(Notification t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TDeleteRange(List<Notification> t)
         {
             throw new NotImplementedException();
         }
@@ -49,7 +109,17 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
+        public void TInsertRange(List<Notification> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TUpdate(Notification t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TUpdateRange(List<Notification> t)
         {
             throw new NotImplementedException();
         }

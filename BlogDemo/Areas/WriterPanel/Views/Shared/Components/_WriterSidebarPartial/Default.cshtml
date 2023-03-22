@@ -1,6 +1,8 @@
 ﻿@model EntityLayer.Concrete.Writer
-
-
+@using Microsoft.AspNetCore.Identity
+@using EntityLayer.Concrete
+@inject UserManager<AppUser> userManager
+@inject SignInManager<AppUser> signManager
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item nav-profile">
@@ -71,11 +73,19 @@
                 <i class="mdi mdi-logout menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Admin/Writer/Index">
-                <span class="menu-title">Yazar Ekleye Git</span>
-                <i class="mdi mdi-logout menu-icon"></i>
-            </a>
-        </li>
+        @if (signManager.IsSignedIn(User))
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+            bool isAdmin = await userManager.IsInRoleAsync(currentUser, "Admin");
+            if (isAdmin)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/Admin/Writer/Index">
+                        <span class="menu-title">Yazar Ekleye Git</span>
+                        <i class="mdi mdi-logout menu-icon"></i>
+                    </a>
+                </li>
+            }
+        }
     </ul>
 </nav>

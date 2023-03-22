@@ -11,13 +11,11 @@ namespace BlogDemo.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly IWriterService _writerService;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public LoginController(IWriterService writerService , SignInManager<AppUser> signInManager)
+        public LoginController(SignInManager<AppUser> signInManager)
         {
-            this._signInManager=signInManager;
-            _writerService = writerService;
+            this._signInManager = signInManager;
         }
 
         [HttpGet]
@@ -25,7 +23,7 @@ namespace BlogDemo.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Dashboard", new { area = "WriterPanel" });
+                return Redirect("/Blog/Index");
             }
             return View();
         }
@@ -37,7 +35,7 @@ namespace BlogDemo.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, true);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index","Dashboard",new {area="WriterPanel"});
+                    return Redirect("/Blog/Index");
                 }
                 else
                 {
@@ -49,7 +47,7 @@ namespace BlogDemo.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Blog", "Login");
         }
     }
 }

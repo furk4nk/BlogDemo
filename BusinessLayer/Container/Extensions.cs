@@ -1,19 +1,16 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.Abstract.UnitOfWork;
 using BusinessLayer.ActionFilters;
 using BusinessLayer.Concrete;
+using BusinessLayer.Concrete.UnitOfWork;
 using BusinessLayer.FluentValidation;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
 using DataAccessLayer.Repositories;
+using DataAccessLayer.UnitOfWork;
 using EntityLayer.Concrete;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Container
 {
@@ -23,6 +20,7 @@ namespace BusinessLayer.Container
 		{
             #region Repositories
             services.AddTransient(typeof(IGenericDal<>), typeof(GenericRepository<>));
+			services.AddTransient(typeof(IAsyncGenericDal<>), typeof(AsyncGenericRepository<>));
 
             services.AddScoped<IBlogService, BlogManager>();
 			services.AddScoped<IBlogDal, EfBlogDal>();
@@ -55,13 +53,18 @@ namespace BusinessLayer.Container
 
 			services.AddScoped<IMessage2Service,Message2Manager>();
 			services.AddScoped<IMessage2Dal,EfMessage2Dal>();
+
+            services.AddTransient<IUnitOfWorkDal,UnitOfWorkDal>();
+            services.AddTransient<IUnitOfWorkService,UnitOfWorkManager>();
             #endregion
 
+            #region Filter attiribute
             services.AddControllers(config =>
             {
                 config.Filters.Add(new CustomActionFilterAttribute());
             });
 			services.AddScoped<CustomActionFilterAttribute>();
+            #endregion
         }
-	}
+    }
 }

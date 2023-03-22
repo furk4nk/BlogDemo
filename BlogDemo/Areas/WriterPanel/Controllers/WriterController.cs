@@ -1,5 +1,6 @@
 ﻿using BlogDemo.Areas.WriterPanel.Models;
 using BusinessLayer.Abstract;
+using BusinessLayer.Abstract.UnitOfWork;
 using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
@@ -17,13 +18,13 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
     [Area("WriterPanel")]
     public class WriterController : Controller
     {
-        private readonly IWriterService _writerService;
+        private readonly IUnitOfWorkService _unitOfWorkService;
         private readonly UserManager<AppUser> _userManager;
 
-        public WriterController(IWriterService writerService, UserManager<AppUser> userManager)
+        public WriterController(UserManager<AppUser> userManager, IUnitOfWorkService unitOfWorkService)
         {
+            _unitOfWorkService= unitOfWorkService;
             _userManager = userManager;
-            _writerService = writerService;
         }
         [HttpGet]
         public IActionResult WriterInsert()
@@ -40,7 +41,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         {
             if (ModelState.IsValid)
             {
-                Writer writer = new Writer()
+                Writer writer = new()
                 {
                     WriterAbout = model.WriterAbout,
                     WriterMail = model.WriterMail,
@@ -48,11 +49,11 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
                     WriterPassword = model.WriterPassword,
                     WriterStatus = true
                 };
-                WriterValitator validations = new WriterValitator();
+                WriterValitator validations = new();
                 ValidationResult result = validations.Validate(writer);
                 if (result.IsValid)
                 {
-                    if (!_writerService.IsWriterControl(model.WriterMail))
+                    if (!_unitOfWorkService.writerService.IsWriterControl(model.WriterMail))
                     {
                         if (model.WriterImage != null)
                         {
@@ -69,7 +70,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
                             writer.WriterImage = Path.Combine("/writerImageFile", "user.png");
                         }
 
-                        _writerService.TInsert(writer);
+                        _unitOfWorkService.writerService.TInsert(writer);
                     }
                     else
                     {
@@ -95,7 +96,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             if (User.Identity.Name == null)
                 return View(null);
             var aspUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            WriterUpdateViewModel model = new WriterUpdateViewModel()
+            WriterUpdateViewModel model = new()
             {
                 ID=aspUser.Id,
                 WriterImage = null,
@@ -121,7 +122,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-                WriterValitator validations = new WriterValitator();
+                WriterValitator validations = new();
                 ValidationResult result1 = validations.Validate(writer);
                 if (result1.IsValid)
                 {
@@ -133,7 +134,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
                     {
                         if (result.Succeeded)
                         {
-                            _writerService.TUpdate(writer);
+                            _unitOfWorkService.writerService.TUpdate(writer);
                         }
                         return Redirect("/WriterPanel/Dashboard");
                     }
@@ -187,7 +188,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             if (User.Identity.Name != null)
             {
                 int authorID = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(type: ClaimTypes.NameIdentifier).Value);
-                var values = _writerService.TGetList(x => x.appUserID == authorID).FirstOrDefault();
+                var values = _unitOfWorkService.writerService.TGetList(x => x.appUserID == authorID).FirstOrDefault();
                 return values;
             }   
             throw new InvalidWriterException(User.Identity.Name);

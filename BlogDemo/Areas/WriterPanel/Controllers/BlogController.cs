@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.Abstract.UnitOfWork;
 using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
+using DataAccessLayer.UnitOfWork;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -15,22 +17,18 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
     [Area("WriterPanel")]
     public class BlogController : Controller
     {
-        private readonly IBlogService _blogService;
-        private readonly ICategoryService _categoryService;
-        private readonly IWriterService _writerService;
-        private Writer _authorUser => AuthorUser();
+        private readonly IUnitOfWorkService _unitOfWorkService;
 
-        public BlogController(IBlogService blogService, ICategoryService categoryService, IWriterService writerService)
+        public BlogController(IUnitOfWorkService unitOfWorkService)
         {
-            _blogService = blogService;
-            _categoryService = categoryService;
-            _writerService = writerService;
+            _unitOfWorkService = unitOfWorkService;
         }
 
         //Yazarın Bloglarının listelenmesi
         public IActionResult BlogListByWriter()
         {
-            var values = _blogService.TGetBlogListByWriterWithCategory(_authorUser.WriterID);
+            // Unit Of Work impelementasyonu kullanılıyor
+            var values = _unitOfWorkService.BlogService.TGetBlogListByWriterWithCategory(Author().WriterID); 
             return View(values);
         }
         [HttpGet]
@@ -43,13 +41,14 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         [HttpPost]
         public IActionResult BlogInsert(Blog blog)
         {
-            BlogValidator validations = new BlogValidator();
+            BlogValidator validations = new();
             ValidationResult result = validations.Validate(blog);
             if (result.IsValid)
             {
-                blog.WriterID = _authorUser.WriterID;
+                blog.WriterID = Author().WriterID;
                 blog.BlogCreateDate=System.DateTime.Now;
-                _blogService.TInsert(blog);
+                _unitOfWorkService.BlogService.TInsert(blog);
+                _unitOfWorkService.TSaveChange();
                 return RedirectToAction("BlogListByWriter", "Blog");
             }
             else
@@ -65,14 +64,15 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         }
         public IActionResult BlogDelete(int id)
         {
-            Blog temp = _blogService.TGetList(x => x.BlogID == id).FirstOrDefault();
-            _blogService.TDelete(temp);
+            Blog temp = _unitOfWorkService.BlogService.TGetList(x => x.BlogID == id).FirstOrDefault();
+            _unitOfWorkService.BlogService.TDelete(temp);
+            _unitOfWorkService.TSaveChange();
             return RedirectToAction("BlogListByWriter", "Blog");
         }
         [HttpGet]
         public IActionResult BlogUpdate(int id)
         {
-            var values = _blogService.TGetById(id);
+            var values = _unitOfWorkService.BlogService.TGetById(id);
             var CategoryValues = CategoryList();
             ViewBag.value = CategoryValues;
             return View(values);
@@ -80,11 +80,12 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         [HttpPost]
         public IActionResult BlogUpdate(Blog blog)
         {
-            BlogValidator validations = new BlogValidator();
+            BlogValidator validations = new();
             ValidationResult result = validations.Validate(blog);
             if (result.IsValid)
             {
-                _blogService.TUpdate(blog);
+                _unitOfWorkService.BlogService.TUpdate(blog);
+                _unitOfWorkService.TSaveChange();
                 return RedirectToAction("BlogListByWriter", "Blog");
             }
             else
@@ -101,7 +102,7 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         }
         private List<SelectListItem> CategoryList()
         {
-            var values = (from x in _categoryService.TGetList()
+            var values = (from x in _unitOfWorkService.categoryService.TGetList()
                           select new SelectListItem
                           {
                               Text = x.CategoryName,
@@ -111,20 +112,20 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         }
         public IActionResult ChangeBlogStatus(int id)
         {
-            var values = _blogService.TGetById(id);
-            bool status = values.BlogStatus;
-            values.BlogStatus=status ==true ? false : true;
-
-            _blogService.TUpdate(values);
+            var Values = _unitOfWorkService.BlogService.TGetById(id);
+            Values.BlogStatus = Values.BlogStatus ? false : true;
+                
+            _unitOfWorkService.BlogService.TUpdate(Values);
+            _unitOfWorkService.TSaveChange();
             return RedirectToAction("BlogListByWriter", "Blog");
-        }
-        private Writer AuthorUser()
+		}
+        private Writer Author()
         {
-            Writer author = new Writer();
+            Writer author = new();
             if (User.Identity.Name!=null)
             {
-                string email = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value;
-                author =  _writerService.TGetList(x => x.WriterMail == email).FirstOrDefault();
+                int authorID = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(type: ClaimTypes.NameIdentifier).Value);
+                author =  _unitOfWorkService.writerService.TGetList(x => x.appUserID == authorID).FirstOrDefault();
                 return author;
             }
             throw new InvalidWriterException(User.Identity.Name);

@@ -1,5 +1,6 @@
 ﻿using BlogDemo.Areas.Admin.Models;
 using BusinessLayer.Abstract;
+using BusinessLayer.Abstract.UnitOfWork;
 using BusinessLayer.FluentValidation;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using EntityLayer.Concrete;
@@ -12,22 +13,20 @@ namespace BlogDemo.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class WriterController : Controller
-    { 
-    private readonly IWriterService _writerService;
+    {
+        private readonly IUnitOfWorkService _unitOfWorkService;
 
-        public WriterController(IWriterService writerService)
+        public WriterController(IWriterService writerService, IUnitOfWorkService unitOfWorkService)
         {
-            _writerService=writerService;
+            _unitOfWorkService= unitOfWorkService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+
         [HttpGet]
         public JsonResult GetWriterList()
         {
-            var result = _writerService.TGetList().Select(x => new WriterModel
+            var result = _unitOfWorkService.writerService.TGetList().Select(x => new WriterModel
             {
                 ID=x.WriterID,
                 WriterName =x.WriterName
@@ -38,17 +37,21 @@ namespace BlogDemo.Areas.Admin.Controllers
         public IActionResult WriterInsert(Writer w)
         {
             w.WriterStatus=true;
-            _writerService.TInsert(w);
+            _unitOfWorkService.writerService.TInsert(w);
+            _unitOfWorkService.TSaveChange();
             var result = JsonConvert.SerializeObject(w);
             return Json(result);
         }
         public IActionResult WriterDelete(int id)
         {
-            var temp = _writerService.TGetById(id);
-            _writerService.TDelete(temp);
+            var temp = _unitOfWorkService.writerService.TGetById(id);
+            _unitOfWorkService.writerService.TDelete(temp);
+            _unitOfWorkService.TSaveChange();
             return RedirectToAction("Index");
         }
+        
     }
 }
 // yazarlar için ek onaylama gerekiyor yani normal kullanıcılar ile ayrım yapılamsı için admin tarafında yazar olmak isteyen kişiler
 // için yazar rolünü onaylaması gerekiyor
+// Yazar listesi için bir action oluşturmak gerekiyor tüm yazarlar advanced JGrid teknolojisiyle görüntülenmeli

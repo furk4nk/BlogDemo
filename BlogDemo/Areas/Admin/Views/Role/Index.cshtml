@@ -1,0 +1,42 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model IPagedList<EntityLayer.Concrete.AppRole>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+    <h2>Rol Listesi</h2>
+</div>
+<div class="ibox-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Role Adı</th>
+                <th>Role Oluşturma Tarihi</th>
+                <th>Sil</th>
+                <th>Detalar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.CreateDate</td>
+                    <td><a href="/Admin/Role/RoleDelete/@item.Id" class="btn btn-danger btnsil">Sil</a></td>
+                    <td><a href="/Admin/Role/RoleUpdate/@item.Id" class="btn btn-info">Detay</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <a href="/Admin/Role/RoleInsert" class="btn btn-success">Role Ekle</a>
+</div>
+<br />
+<div class="col-lg-6 d-flex justify-content-start">
+    @Html.PagedListPager((IPagedList)Model,page => Url.Action("Index","Category",new { page}))
+</div>

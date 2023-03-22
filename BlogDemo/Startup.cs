@@ -35,7 +35,8 @@ namespace BlogDemo
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<Context>()
                 .AddErrorDescriber<CustomErrorDescriber>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddRoles<AppRole>();
             services.Configure<IdentityOptions>(options =>
             {
                 // password settings

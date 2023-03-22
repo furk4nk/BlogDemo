@@ -19,7 +19,7 @@ namespace BusinessLayer.ActionFilters
         //aksiyon gerçekleşmeden önce 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var val = context.HttpContext.Response.StatusCode;
+            var result = context.HttpContext.User.Identity.Name;
         }
     }
 }

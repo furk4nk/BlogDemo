@@ -44,6 +44,7 @@ namespace BusinessLayer.Abstract
 
         /// <summary>
         /// parametreye göre son blogları listelemek için kullanılır
+        /// includes Categories and Writers
         /// </summary>
         /// <param name="count">sondan kaç tane bloğun listelenmek istediğini ister</param>
         /// <returns>parametreye göre blog listesi döndürür</returns>

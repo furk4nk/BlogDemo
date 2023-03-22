@@ -19,7 +19,64 @@ namespace BusinessLayer.Concrete
         {
             _messageDal=messageDal;
         }
+        #region Async
+        public Task<List<Message2>> TGetListAsync()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<List<A>> TGetListAsync<A>() where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Message2>> TGetListAsync(Expression<Func<Message2, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync(Message2 t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertRangeAsync(List<Message2> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync<A>(A model) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Message2> TGetByIdAsync(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<A> TGetByIdAsync<A>(int ID) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync(Expression<Func<Message2, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Sync
         public void TDelete(Message2 t)
         {
             throw new NotImplementedException();
@@ -79,5 +136,21 @@ namespace BusinessLayer.Concrete
         {
             return _messageDal.GetCount(filter);
         }
+
+        public void TDeleteRange(List<Message2> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TInsertRange(List<Message2> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TUpdateRange(List<Message2> t)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

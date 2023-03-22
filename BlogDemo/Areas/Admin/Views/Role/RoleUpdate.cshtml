@@ -1,0 +1,29 @@
+﻿@model EntityLayer.Concrete.AppRole
+@{
+    ViewData["Title"] = "RoleUpdate";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="ibox-content">
+    <div class="row">
+        <div class="col-sm-12 ">
+            <h3 class="m-t-none m-b">Role Güncelle</h3>
+            <form role="form" method="post">
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.CreateDate)
+                @Html.HiddenFor(x => x.ConcurrencyStamp)
+                <div class="form-group">
+                    <label>Role Adı</label>
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                    <input type="text" name="Name" class="form-control">
+                </div>
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <div>
+                    <a href="/Admin/Role/Index" class="btn btn-white">Vazgeç</a>
+                    <button class="btn btn-primary" type="submit"><strong>Güncelle</strong></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

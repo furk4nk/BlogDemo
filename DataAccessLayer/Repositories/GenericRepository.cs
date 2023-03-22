@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,27 +13,31 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class GenericRepository<T> : IGenericDal<T> where T : class
+    public class GenericRepository<T> : AsyncGenericRepository<T> , IGenericDal<T> where T : class
     {
         protected readonly Context _context;
 
-        public GenericRepository(Context c)
+        public GenericRepository(Context context) : base(context)
         {
-            this._context=c;
+            this._context=context;
         }
-
+        #region sync
         [NonAction]
-        public bool Delete(T t)
+        public void Delete(T t)
         {
-            return Delete<T>(t);
+            Delete<T>(t);
         }
         [NonAction]
-        public bool Delete<A>(A model) where A : class
+        public void Delete<A>(A model) where A : class
         {
             _context.Set<A>().Remove(model);
-            int ctrl = _context.SaveChanges();
-            return CtrlValue(ctrl);
         }
+        [NonAction]
+        public void DeleteRange(List<T> t)
+        {
+            _context.Set<T>().RemoveRange(t);
+        }
+
         [NonAction]
         public T GetById(int ID)
         {
@@ -52,8 +57,8 @@ namespace DataAccessLayer.Repositories
         public int GetCount<A>(Expression<Func<A, bool>> filter) where A : class
         {
             if (filter == null)
-                return _context.Set<A>().Count();
-            return _context.Set<A>().Count(filter);
+                return _context.Set<A>().AsNoTracking().Count();
+            return _context.Set<A>().AsNoTracking().Count(filter);
         }
         [NonAction]
         public List<T> GetList()
@@ -68,27 +73,25 @@ namespace DataAccessLayer.Repositories
         [NonAction]
         public List<A> GetList<A>() where A : class
         {
-            return _context.Set<A>().ToList();
+            return _context.Set<A>().AsNoTracking().ToList();
         }
         [NonAction]
         public List<A> GetList<A>(Expression<Func<A, bool>> filter) where A : class
         {
-            return _context.Set<A>().Where(filter).ToList();
+            return _context.Set<A>().AsNoTracking().Where(filter).ToList();
         }
         [NonAction]
-        public virtual bool Insert(T t)
+
+        public virtual void Insert(T t)
         {
-            return Insert<T>(t);
+            Insert<T>(t);
         }
         [NonAction]
-        public bool Insert<A>(A model) where A : class
+        public void Insert<A>(A model) where A : class
         {
-            int ctrl = 0; 
             if (model is not null)
             {
                 _context.Set<A>().Add(model);
-                ctrl = _context.SaveChanges();
-                return CtrlValue(ctrl);
             }
             else
             {
@@ -97,18 +100,22 @@ namespace DataAccessLayer.Repositories
             
         }
         [NonAction]
-        public virtual bool Update(T t)
+        public void InsertRange(List<T> t)
         {
-            return Update<T>(t);
+            _context.Set<T>().AddRange(t);
+        }
+
+        [NonAction]
+        public virtual void Update(T t)
+        {
+            Update<T>(t);
         }
         [NonAction]
-        public bool Update<A>(A model) where A : class
+        public void Update<A>(A model) where A : class
         {
             if (model is not null)
             {
                 _context.Set<A>().Update(model);
-                int ctrl = _context.SaveChanges();
-                return CtrlValue(ctrl);
             }
             else
             {
@@ -116,11 +123,11 @@ namespace DataAccessLayer.Repositories
             }
 
         }
-        protected bool CtrlValue(int ctrl = 0)
-        { 
-            if (ctrl is 0)
-                return false;
-            return true;
+        [NonAction]
+        public void UpdateRange(List<T> t)
+        {
+            _context.Set<T>().UpdateRange(t);
         }
+        #endregion
     }
 }

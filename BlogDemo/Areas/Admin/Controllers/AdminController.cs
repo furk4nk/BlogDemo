@@ -2,7 +2,7 @@
 
 namespace BlogDemo.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin")] // Role Eklenecek
     public class AdminController : Controller
     {
         public IActionResult Index()

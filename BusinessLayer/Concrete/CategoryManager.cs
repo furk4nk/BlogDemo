@@ -19,9 +19,69 @@ namespace BusinessLayer.Concrete
             _categoryDal = categoryDal;
         }
 
+        public Task<Category> TGetByIdAsync(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<A> TGetByIdAsync<A>(int ID) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync(Expression<Func<Category, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> TGetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Category>> TGetListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>() where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Category>> TGetListAsync(Expression<Func<Category, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<A>> TGetListAsync<A>(Expression<Func<A, bool>> filter) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync(Category t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertAsync<A>(A model) where A : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TInsertRangeAsync(List<Category> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TDelete(Category t)
         {
             _categoryDal.Delete(t);
+        }
+
+        public void TDeleteRange(List<Category> t)
+        {
+            throw new NotImplementedException();
         }
 
         public Category TGetById(int ID)
@@ -49,9 +109,19 @@ namespace BusinessLayer.Concrete
             _categoryDal.Insert(t);
         }
 
+        public void TInsertRange(List<Category> t)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TUpdate(Category t)
         {
             _categoryDal.Update(t);
+        }
+
+        public void TUpdateRange(List<Category> t)
+        {
+            throw new NotImplementedException();
         }
     }
 }

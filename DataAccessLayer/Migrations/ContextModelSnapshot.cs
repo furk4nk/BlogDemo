@@ -93,6 +93,9 @@ namespace DataAccessLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
