@@ -1,0 +1,25 @@
+﻿@model EntityLayer.Concrete.Notification
+@{
+    ViewData["Title"] = "NotificationDetails";
+    Layout = "~/Areas/WriterPanel/Views/Shared/_WriterLayout.cshtml";
+}
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Bildirim Detayı</h4><br />
+
+            <form class="forms-sample">
+                <div class="form-group">
+                    <label for="exampleInputUsername1">Konu</label>
+                    <input type="text" class="form-control" disabled="disabled" asp-for="NotificationType">
+                </div>
+                <div class="form-group">
+                    <label>İçerik</label>
+                    <textarea cols="10" rows="10" class="form-control" disabled="disabled" asp-for="NotificationDetails">
+                    </textarea>
+                </div>
+                <a href="/WriterPanel/Notification/Index" class="btn btn-outline-behance">Geri Dön</a>
+            </form>
+        </div>
+    </div>
+</div>

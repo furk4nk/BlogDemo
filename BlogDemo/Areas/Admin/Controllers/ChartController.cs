@@ -1,5 +1,6 @@
 ﻿using BlogDemo.Areas.Admin.Models;
 using BusinessLayer.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Linq;
 namespace BlogDemo.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ChartController : Controller
     {
         private readonly ICategoryService _categoryService;

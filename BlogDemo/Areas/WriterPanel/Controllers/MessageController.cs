@@ -3,6 +3,7 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -10,10 +11,10 @@ using System.Security.Claims;
 namespace BlogDemo.Areas.WriterPanel.Controllers
 {
     [Area("WriterPanel")]
+    [Authorize(Roles ="Yazar")]
     public class MessageController : Controller
     {
         private readonly IUnitOfWorkService _unitOfWorkService;
-        private Writer _author => AuthorUser();
         public MessageController(IUnitOfWorkService unitOfWorkService)
         {
             _unitOfWorkService = unitOfWorkService;
@@ -27,6 +28,9 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
         public IActionResult MessageDetails(int id)
         {
             var values = _unitOfWorkService.message2Service.TGetByIdWithWriter(id);
+            values.MessageStatus = false;
+            _unitOfWorkService.message2Service.TUpdate(values);
+            _unitOfWorkService.TSaveChange();
             return View(values);
         }
         [HttpGet]
@@ -46,18 +50,19 @@ namespace BlogDemo.Areas.WriterPanel.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult SendMessage(Message2 message) // receiver id alakasız değerlerde geliyor data access gtby ıd metodunda bir sorun var sanırım
+        public IActionResult SendMessage(Message2 message)
         {
-            MessageValidator validations = new MessageValidator(_unitOfWorkService.message2Service);
+            MessageValidator validations = new(_unitOfWorkService.writerService);
             ValidationResult result = validations.Validate(message);
             if (result.IsValid)
             {
                 message.MessageDate=System.DateTime.Now;
                 message.MessageStatus=true;
                 message.SenderID = AuthorUser().WriterID;
-                message.ReceiverID = _unitOfWorkService.message2Service.TGetID(message.ReceiverUser.WriterMail);
+                message.ReceiverID = _unitOfWorkService.writerService.TGetList(x => x.WriterMail == message.ReceiverUser.WriterMail).FirstOrDefault().WriterID;
                 message.ReceiverUser=null;
                 _unitOfWorkService.message2Service.TInsert(message);
+                _unitOfWorkService.TSaveChange();
                 return RedirectToAction("SendBox", "Message");
             }
             else

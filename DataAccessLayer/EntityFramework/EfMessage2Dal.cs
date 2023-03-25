@@ -5,6 +5,7 @@ using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace DataAccessLayer.EntityFramework
 {
@@ -33,6 +34,15 @@ namespace DataAccessLayer.EntityFramework
         public List<Message2> GetListMessageByWriter(int id)
         {
             return _context.Set<Message2>().Where(x => x.ReceiverID==id).Include(y => y.SenderUser).ToList();
+        }
+
+        public List<Message2> GetListMessageByWriter(int id, int count)
+        {
+            return _context.Set<Message2>()
+                .Where(x => x.ReceiverID == id)
+                .Where(y => y.MessageStatus == true)
+                .Include(c => c.SenderUser)
+                .Take(count).ToList();
         }
 
         public List<Message2> GetListSendMessageByWriter(int id)

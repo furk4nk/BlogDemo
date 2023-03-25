@@ -14,7 +14,7 @@ namespace BlogDemo.Areas.WriterPanel.ViewComponents.Writer
 
         public IViewComponentResult Invoke()
         {
-            var values = _notificationService.TGetList();
+            var values = _notificationService.TGetListNotificationByTrueAndCount(4);
             return View(values);
         }
     }

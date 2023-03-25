@@ -72,13 +72,6 @@ namespace BlogDemo
             });
 
             services.AddMvc();
-            services.AddAuthentication(
-                    CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(x =>
-                    {
-                        x.LoginPath = "/Login/Index/";
-                    }
-            );
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -86,6 +79,7 @@ namespace BlogDemo
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
                 options.LoginPath = "/Login/Index";
+                options.AccessDeniedPath = "/ErrorPage/AccessDenied";
                 options.SlidingExpiration = true;
 
             });

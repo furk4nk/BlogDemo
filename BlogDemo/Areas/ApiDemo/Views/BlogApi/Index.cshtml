@@ -27,7 +27,9 @@
                 <th>#</th>
                 <th>Blog Adı</th>
                 <th>Blog Kategori</th>
+                <th>Blog Durumu</th>
                 <th>Blog tarihi</th>
+                <th>Sil</th>
                 <th>Düzenle</th>
             </tr>
         </thead>
@@ -35,11 +37,20 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.ID</td>
-                    <td>@item.BlogName</td>
-                    <td>@(((DateTime)item.date).ToString("dd MMM yyyy"))</td>
-                    <td><a href="/ApiDemo/BlogApi/BlogDelete/@item.ID" class="btn btn-danger btnsil">Sil</a></td>
-                    <td><a href="/ApiDemo/BlogApi/BlogUpdate/@item.ID" class="btn btn-info">Düzenle</a></td>
+                    <td>@item.BlogID</td>
+                    <td>@item.BlogTitle</td>
+                    <td>@item.CategoryID</td>
+                    @if (item.BlogStatus)
+                    {
+                        <td>Aktif</td>
+                    }
+                    else
+                    {
+                        <td>Pasif</td>
+                    }
+                    <td>@(((DateTime)item.BlogCreateDate).ToString("dd MMM yyyy"))</td>
+                    <td><a href="/ApiDemo/BlogApi/BlogDelete/@item.BlogID" class="btn btn-danger btnsil">Sil</a></td>
+                    <td><a href="/ApiDemo/BlogApi/BlogUpdate/@item.BlogID" class="btn btn-info">Düzenle</a></td>
                 </tr>
             }
         </tbody>

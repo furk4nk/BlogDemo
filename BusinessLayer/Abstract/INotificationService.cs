@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Abstract
 {
-    public interface INotificationService :  IGenericService<Notification>
+    public interface INotificationService : IGenericService<Notification>
     {
+        List<Notification> TGetListNotificationByTrueAndCount(int count);
     }
 }
-    

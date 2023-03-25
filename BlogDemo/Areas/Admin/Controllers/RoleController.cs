@@ -10,7 +10,8 @@ using X.PagedList;
 namespace BlogDemo.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	public class RoleController : Controller
+    [Authorize(Roles = "Admin")]
+    public class RoleController : Controller
 	{
 		private readonly RoleManager<AppRole> _roleManager;
 

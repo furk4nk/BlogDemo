@@ -4,10 +4,14 @@ namespace BlogDemo.Areas.ApiDemo.Models
 {
     public class ApiViewModel
     {
-        public Guid ID { get; set; } = Guid.NewGuid();
-        public string BlogName { get; set; }
-        public string BlogDescription { get; set; }
-        public string BlogType { get; set; }
-        public DateTime date { get; set; } = DateTime.Now;
+        public int BlogID { get; set; }
+        public string BlogTitle { get; set; }
+        public string BlogContext { get; set; }
+        public string BlogThumbNailImage { get; set; }
+        public string BlogImage { get; set; }
+        public DateTime BlogCreateDate { get; set; }
+        public bool BlogStatus { get; set; }
+        public int CategoryID { get; set; }
+        public int WriterID { get; set; }
     }
 }

@@ -7,12 +7,12 @@ namespace BusinessLayer.FluentValidation
 {
     public class MessageValidator : AbstractValidator<Message2>
     {
-        public MessageValidator(IMessage2Service message2Service)   
+        public MessageValidator(IWriterService writerManager)   
         {
             // Rules ReceiverUser.WriterName
             RuleFor(x => x.ReceiverUser.WriterMail).Custom((mail, context) =>
             {
-                    var result = message2Service.TGetList(x => x.ReceiverUser.WriterMail==mail).FirstOrDefault();
+                    var result = writerManager.TGetList(x => x.WriterMail==mail).FirstOrDefault();
                     if (result == null)
                     {
                         context.AddFailure("ReceiverUser.WriterMail", "Yazar Epostası sistemde kayıtlı değil Lütfen sisteme Kayıtlı olan yazar epostasını giriniz");

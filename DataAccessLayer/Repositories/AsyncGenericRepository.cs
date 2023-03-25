@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class AsyncGenericRepository<T> : IAsyncGenericDal<T> where T :class
+    public class AsyncGenericRepository<T> : IAsyncGenericDal<T> where T : class
     {
         private readonly Context _context;
         public AsyncGenericRepository(Context context)
@@ -23,23 +23,23 @@ namespace DataAccessLayer.Repositories
             return await GetByIdAsync<T>(ID);
         }
 
-		public async Task<A> GetByIdAsync<A>(int ID) where A : class  => await _context.Set<A>().FindAsync(ID);
-		
+        public async Task<A> GetByIdAsync<A>(int ID) where A : class => await _context.Set<A>().FindAsync(ID);
 
-		public async Task<int> GetCountAsync(Expression<Func<T, bool>> filter)
+
+        public async Task<int> GetCountAsync(Expression<Func<T, bool>> filter)
         {
             return await GetCountAsync<T>(filter);
         }
 
         public async Task<int> GetCountAsync<A>(Expression<Func<A, bool>> filter) where A : class
         {
-            if(filter == null)
+            if (filter == null)
                 return await _context.Set<A>().AsNoTracking().CountAsync();
             return await _context.Set<A>().AsNoTracking().Where(filter).CountAsync();
         }
 
         public Task<List<T>> GetListAsync() => GetListAsync<T>();
-        
+
 
         public Task<List<A>> GetListAsync<A>() where A : class
         {

@@ -5,6 +5,7 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.FluentValidation;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 namespace BlogDemo.Areas.WriterPanel.Controllers
 {
     [Area("WriterPanel")]
+    [Authorize(Roles ="Yazar")]
     public class WriterController : Controller
     {
         private readonly IUnitOfWorkService _unitOfWorkService;

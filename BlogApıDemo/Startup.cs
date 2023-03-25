@@ -1,7 +1,12 @@
+using BlogApıDemo.DataAccess.Abstract;
+using BlogApıDemo.DataAccess.Concrete;
+using BlogApıDemo.DataAccess.Concrete.EntityFramework;
+using BlogApıDemo.DataAccess.GenericRepo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +31,13 @@ namespace BlogApıDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>(optionsAction: option =>
+            option.UseSqlServer(Configuration.GetConnectionString("DbBlogConnection")));
+
+            services.AddTransient(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            services.AddScoped<IBlogDal, EfBlogDal>();
+            services.AddScoped<ICategoryDal, EfCategoryDal>();
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

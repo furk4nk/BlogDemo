@@ -119,7 +119,7 @@ namespace BusinessLayer.Concrete
 
         public void TUpdate(Message2 t)
         {
-            throw new NotImplementedException();
+            _messageDal.Update(t);
         }
 
         public Message2 TGetByIdSendMessageWithWriter(int id)
@@ -150,6 +150,11 @@ namespace BusinessLayer.Concrete
         public void TUpdateRange(List<Message2> t)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Message2> TGetListMessagesByWriter(int id, int Count)
+        {
+            return _messageDal.GetListMessageByWriter(id:id,count:Count);
         }
         #endregion
     }

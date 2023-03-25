@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class GenericRepository<T> : AsyncGenericRepository<T> , IGenericDal<T> where T : class
+    public class GenericRepository<T> : AsyncGenericRepository<T>, IGenericDal<T> where T : class
     {
         protected readonly Context _context;
 
@@ -71,17 +71,12 @@ namespace DataAccessLayer.Repositories
             return GetList<T>(filter);
         }
         [NonAction]
-        public List<A> GetList<A>() where A : class
-        {
-            return _context.Set<A>().AsNoTracking().ToList();
-        }
-        [NonAction]
-        public List<A> GetList<A>(Expression<Func<A, bool>> filter) where A : class
-        {
-            return _context.Set<A>().AsNoTracking().Where(filter).ToList();
-        }
-        [NonAction]
+        public List<A> GetList<A>() where A : class => _context.Set<A>().AsNoTracking().ToList();
 
+        [NonAction]
+        public List<A> GetList<A>(Expression<Func<A, bool>> filter) where A : class => _context.Set<A>().AsNoTracking().Where(filter).ToList();
+
+        [NonAction]
         public virtual void Insert(T t)
         {
             Insert<T>(t);
@@ -97,7 +92,7 @@ namespace DataAccessLayer.Repositories
             {
                 throw new Exception("Kullanıcı Eklenemedi Kullanıcı Boş");
             }
-            
+
         }
         [NonAction]
         public void InsertRange(List<T> t)

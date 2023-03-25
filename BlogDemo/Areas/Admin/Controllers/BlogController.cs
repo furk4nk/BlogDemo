@@ -3,6 +3,7 @@ using BusinessLayer.Abstract;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ using System.Linq;
 namespace BlogDemo.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class BlogController : Controller
     {
         private readonly IBlogService _blogService;
@@ -65,7 +67,6 @@ namespace BlogDemo.Areas.Admin.Controllers
             }).ToList();
             return models;
         }
-
     }
 
 }

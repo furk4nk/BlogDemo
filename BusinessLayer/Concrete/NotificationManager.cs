@@ -18,7 +18,7 @@ namespace BusinessLayer.Concrete
         {
             _notificationDal=notificationDal;
         }
-
+        #region Async
         public Task<Notification> TGetByIdAsync(int ID)
         {
             throw new NotImplementedException();
@@ -73,6 +73,7 @@ namespace BusinessLayer.Concrete
         {
             throw new NotImplementedException();
         }
+        #endregion
 
         public void TDelete(Notification t)
         {
@@ -86,7 +87,7 @@ namespace BusinessLayer.Concrete
 
         public Notification TGetById(int ID)
         {
-            throw new NotImplementedException();
+            return _notificationDal.GetById(ID);
         }
 
         public int TGetCount(Expression<Func<Notification, bool>> filter)
@@ -116,12 +117,17 @@ namespace BusinessLayer.Concrete
 
         public void TUpdate(Notification t)
         {
-            throw new NotImplementedException();
+            _notificationDal.Update(t);
         }
 
         public void TUpdateRange(List<Notification> t)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Notification> TGetListNotificationByTrueAndCount(int count)
+        {
+            return _notificationDal.GetListNotificationByTrueAndCount(count);
         }
     }
 }

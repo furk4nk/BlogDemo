@@ -15,5 +15,10 @@ namespace DataAccessLayer.EntityFramework
         public EfNotificationDal(Context c) : base(c)
         {
         }
+
+        public List<Notification> GetListNotificationByTrueAndCount(int count)
+        {
+            return _context.Set<Notification>().Where(x => x.NotificationStatus == true).Take(count).ToList();
+        }
     }
 }

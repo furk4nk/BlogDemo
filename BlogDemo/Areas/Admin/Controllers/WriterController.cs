@@ -5,6 +5,7 @@ using BusinessLayer.FluentValidation;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Linq;
 namespace BlogDemo.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class WriterController : Controller
     {
         private readonly IUnitOfWorkService _unitOfWorkService;
